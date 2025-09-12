@@ -5,27 +5,35 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Animal {
     private int positionX;
     private int positionY;
-    private int maxSpeed;
+    private final int maxSpeed;
 
     public Animal(int positionX, int positionY) {
         this.positionX = positionX;
         this.positionY = positionY;
-        maxSpeed = 3;
+        this.maxSpeed = 3;
     }
 
     public void navigate() {
         int nextPosX = positionX + getStepsCount();
         int nextPosY = positionY + getStepsCount();
-        boolean badX = nextPosX >= Island.getIsland().length || nextPosX < 0;
-        boolean badY = nextPosY >= Island.getIsland()[positionX].length || nextPosY < 0;
-        if (badX || badY) {
-            navigate();
-        } else {
+        if (isPositionValid(nextPosX, nextPosY)) {
             changePosition(nextPosX, nextPosY);
+        } else {
+            navigate();
         }
     }
 
+    private boolean isPositionValid(int positionX, int positionY) {
+        return positionX >= 0
+                && positionX < Island.HEIGHT
+                && positionY >= 0
+                && positionY < Island.WIDTH;
+    }
+
     private void changePosition(int positionX, int positionY) {
+        if (isPositionValid(positionX, positionY)) {
+            throw new RuntimeException("Not Valid Position");
+        }
         Animal[][] island = Island.getIsland();
         island[this.positionX][this.positionY] = null;
         this.positionX = positionX;

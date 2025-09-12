@@ -6,11 +6,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AnimalTest {
     @Test
-    public void navigate() {
+    void navigate_Does_Not_Throw_ArrayIndexOutOfBoundsException() {
         Animal animal = new Animal(3, 4);
         for (int i = 0; i < 10000; i++) {
             animal.navigate();
         }
         assertDoesNotThrow(() -> new ArrayIndexOutOfBoundsException());
     }
+
+
 }
