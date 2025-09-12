@@ -9,3 +9,5 @@ _
 /src/main/java/com/javarush/projects/Island.java,d\4\d4e308e5ba11913bceed4a9a2ec35ccdc26bdeea
 c
 3src/test/java/com/javarush/projects/AnimalTest.java,7\1\716f2d3cabcc136331ae0a1de43688c7c72e5026
+_
+/src/main/java/com/javarush/projects/Sector.java,e\0\e058cf47a0ca72a8aa118269ec45e45b573e5003

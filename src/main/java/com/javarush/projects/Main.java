@@ -9,7 +9,7 @@ public class Main {
         Animal[][] island = Island.getIsland();
         for (Animal[] islandX : island) {
             for (Animal animal1 : islandX) {
-                if (animal1 instanceof Animal) {
+                if (animal1 != null) {
                     System.out.println(animal1);
                 }
             }

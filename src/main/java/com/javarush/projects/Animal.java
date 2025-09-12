@@ -5,12 +5,11 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Animal {
     private int positionX;
     private int positionY;
-    private final int maxSpeed;
+    private static final int MAX_SPEED = 3;
 
     public Animal(int positionX, int positionY) {
         this.positionX = positionX;
         this.positionY = positionY;
-        this.maxSpeed = 3;
     }
 
     public void navigate() {
@@ -43,7 +42,7 @@ public class Animal {
     }
 
     private int getStepsCount() {
-        return ThreadLocalRandom.current().nextInt(0 - maxSpeed, maxSpeed + 1);
+        return ThreadLocalRandom.current().nextInt(0 - MAX_SPEED, MAX_SPEED + 1);
     }
 
     @Override
