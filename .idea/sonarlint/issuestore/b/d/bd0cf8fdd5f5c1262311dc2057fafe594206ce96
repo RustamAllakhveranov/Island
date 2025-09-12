@@ -1,2 +1,5 @@
 
-E	java:S106"+Replace this use of System.out by a logger.(‚ÞÏ¥ýÿÿÿÿ
+\
+java:S1854":Remove this useless assignment to local variable "animal".(÷¹š¤ûÿÿÿÿ8‚þ»ó“3
+M
+java:S1481"+Remove this unused "animal" local variable.(÷¹š¤ûÿÿÿÿ8„þ»ó“3
