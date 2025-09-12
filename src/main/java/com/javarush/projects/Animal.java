@@ -2,14 +2,16 @@ package com.javarush.projects;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Animal {
-    private int positionX;
-    private int positionY;
-    private static final int MAX_SPEED = 3;
+public abstract class Animal {
+    int positionX;
+    int positionY;
+    private final int MAX_SPEED;
+    boolean isAlive = true;
 
-    public Animal(int positionX, int positionY) {
+    public Animal(int positionX, int positionY, int maxSpeed) {
         this.positionX = positionX;
         this.positionY = positionY;
+        this.MAX_SPEED = maxSpeed;
         Island.getSector(positionX, positionY).enter(this);
     }
 
@@ -39,7 +41,7 @@ public class Animal {
         this.positionX = positionX;
         this.positionY = positionY;
         Island.getSector(positionX, positionY).enter(this);
-        System.out.println(this + " changed position on " + positionX + " / " + positionY);
+//        System.out.println(this + " changed position on " + positionX + " / " + positionY);
     }
 
     private int getStepsCount() {

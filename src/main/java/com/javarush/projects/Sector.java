@@ -12,7 +12,7 @@ public class Sector {
         this.positionY = positionY;
     }
 
-    private List animals = new ArrayList<>();
+    private List<Animal> animals = new ArrayList<>();
 
     public void enter(Animal animal) {
         animals.add(animal);
@@ -20,6 +20,15 @@ public class Sector {
 
     public void leave(Animal animal) {
         animals.remove(animal);
-        System.out.println(animal + " left ");
+//        System.out.println(String.format("%s left pos: [%s][%s]", animal, positionX, positionY));
+    }
+
+    public Rabbit findRabbits() {
+        for (Animal animal : animals) {
+            if (animal instanceof Rabbit) {
+                return (Rabbit) animal;
+            }
+        }
+        return null;
     }
 }

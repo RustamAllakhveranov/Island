@@ -11,3 +11,9 @@ c
 3src/test/java/com/javarush/projects/AnimalTest.java,7\1\716f2d3cabcc136331ae0a1de43688c7c72e5026
 _
 /src/main/java/com/javarush/projects/Sector.java,e\0\e058cf47a0ca72a8aa118269ec45e45b573e5003
+]
+-src/test/java/com/javarush/projects/Wolf.java,3\8\3897d408bc64d6fd5d2c9d30c847c712119ca433
+]
+-src/main/java/com/javarush/projects/Wolf.java,9\9\9979e2d0c8270312e0770d06f5061b4c2b8f492a
+_
+/src/main/java/com/javarush/projects/Rabbit.java,b\6\b61202c9c225247a2726fa0a1342ed3cad12b21a
