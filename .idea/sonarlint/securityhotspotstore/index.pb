@@ -7,3 +7,5 @@ _
 /src/main/java/com/javarush/projects/Animal.java,c\6\c6faad0e34558148587686e221903a0fdb5714f1
 _
 /src/main/java/com/javarush/projects/Island.java,d\4\d4e308e5ba11913bceed4a9a2ec35ccdc26bdeea
+c
+3src/test/java/com/javarush/projects/AnimalTest.java,7\1\716f2d3cabcc136331ae0a1de43688c7c72e5026
