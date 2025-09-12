@@ -10,6 +10,7 @@ public class Animal {
     public Animal(int positionX, int positionY) {
         this.positionX = positionX;
         this.positionY = positionY;
+        Island.getSector(positionX, positionY).enter(this);
     }
 
     public void navigate() {
@@ -30,14 +31,14 @@ public class Animal {
     }
 
     private void changePosition(int positionX, int positionY) {
-        if (isPositionValid(positionX, positionY)) {
+        if (!isPositionValid(positionX, positionY)) {
             throw new RuntimeException("Not Valid Position");
         }
-        Animal[][] island = Island.getIsland();
-        island[this.positionX][this.positionY] = null;
+        Sector sector = Island.getSector(this.positionX, this.positionY);
+        sector.leave(this);
         this.positionX = positionX;
         this.positionY = positionY;
-        island[positionX][positionY] = this;
+        Island.getSector(positionX, positionY).enter(this);
         System.out.println(this + " changed position on " + positionX + " / " + positionY);
     }
 
