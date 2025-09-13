@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class AnimalTest {
     @BeforeAll
     static void initIsland() {
-        Island.createIsland();
+        Island island = Island.getInstance();
     }
 
     @Test

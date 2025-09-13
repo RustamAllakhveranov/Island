@@ -1,19 +1,37 @@
 package com.javarush.projects;
 
-public class Wolf extends Animal {
+public class Wolf extends Animal implements Predator{
+
     public Wolf(int positionX, int positionY) {
         super(positionX, positionY, 3);
+        weight = 50;
     }
+
+
 
     public void eatRabbit(Rabbit rabbit) {
         rabbit.die();
     }
 
+    @Override
+    public void eatAnimal(Animal animal) {
+        animal.die();
+    }
+
     public void hunt() {
-        Rabbit rabbit = Island.getSector(positionX, positionY).findRabbits();
+        Rabbit rabbit = currentLocation.findRabbits();
         if (rabbit != null && rabbit.isAlive){
             rabbit.die();
-            System.out.println("RABBIT HUNTED!!!");
+            System.out.println("RABBIT KILLED!!!");
+        }
+    }
+
+
+    protected void launchLifeCycle() {
+        System.out.println(currentThread.getName());
+        while(currentThread.isInterrupted()){
+            hunt();
+            navigate();
         }
     }
 }

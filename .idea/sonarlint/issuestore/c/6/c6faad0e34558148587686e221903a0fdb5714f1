@@ -1,6 +1,9 @@
 
-g	java:S112%"FDefine and throw a dedicated exception instead of using a generic one.(Úè¦ÿÿÿÿÿ8õË¿ı“3
-p	java:S116"TRename this field "MAX_SPEED" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ë®Ë¢8ıË¿ı“3
+p	java:S116"TRename this field "MAX_SPEED" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ë®Ë¢8øÛ¦”3
 U
-java:S5993"9Change the visibility of this constructor to "protected".(ş´™p8şË¿ı“3
-]	java:S125,"<This block of commented-out lines of code should be removed.(°‹ÑÜûÿÿÿÿ8ÓÒëı“3
+java:S5993"9Change the visibility of this constructor to "protected".(ş´™p8€Û¦”3
+]	java:S125$"<This block of commented-out lines of code should be removed.(°‹ÑÜûÿÿÿÿ8„Û¦”3
+]	java:S1254"<This block of commented-out lines of code should be removed.(Á…àœøÿÿÿÿ8…Û¦”3
+X	java:S1257"<This block of commented-out lines of code should be removed.(şÿ¥è8…Û¦”3
+G	java:S106;"+Replace this use of System.out by a logger.( ŞÑı8…Û¦”3
+]	java:S125C"<This block of commented-out lines of code should be removed.(”¿ïÂùÿÿÿÿ8û“‘§”3

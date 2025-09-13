@@ -1,13 +1,16 @@
 package com.javarush.projects;
 
 public class Island {
-    public static final int WIDTH = 3;
-    public static final int HEIGHT = 3;
-    private static Sector[][] island = new Sector[WIDTH][HEIGHT];
+    public static final int WIDTH = 10;
+    public static final int HEIGHT = 10;
+    private final Sector[][] island;
 
+    private Island() {
+        island = new Sector[WIDTH][HEIGHT];
+        splitIslandToSectors();
+    }
 
-
-    public static void createIsland() {
+    private void splitIslandToSectors() {
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
                 island[x][y] = new Sector(x, y);
@@ -15,7 +18,19 @@ public class Island {
         }
     }
 
-    public static Sector getSector(int positionX, int positionY) {
-        return island[positionX][positionY];
+    public Sector getSector(int positionX, int positionY) {
+        if (Validator.isPositionValid(positionX, positionY)) {
+            return island[positionX][positionY];
+        } else {
+            throw new RuntimeException(String.format("Sector[%d][%d] does not exist.", positionX, positionY));
+        }
+    }
+
+    private static final class InstanceHolder {
+        private static final Island INSTANCE = new Island();
+    }
+
+    public static Island getInstance() {
+        return InstanceHolder.INSTANCE;
     }
 }

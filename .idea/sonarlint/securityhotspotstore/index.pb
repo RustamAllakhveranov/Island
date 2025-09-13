@@ -12,8 +12,10 @@ c
 _
 /src/main/java/com/javarush/projects/Sector.java,e\0\e058cf47a0ca72a8aa118269ec45e45b573e5003
 ]
--src/test/java/com/javarush/projects/Wolf.java,3\8\3897d408bc64d6fd5d2c9d30c847c712119ca433
-]
 -src/main/java/com/javarush/projects/Wolf.java,9\9\9979e2d0c8270312e0770d06f5061b4c2b8f492a
 _
 /src/main/java/com/javarush/projects/Rabbit.java,b\6\b61202c9c225247a2726fa0a1342ed3cad12b21a
+a
+1src/main/java/com/javarush/projects/Predator.java,9\a\9ade034749cddc7ecf2e5980502b3c2523ff998d
+b
+2src/main/java/com/javarush/projects/Validator.java,4\2\42dc2201abaeb7633aa8d3badbd98feea2d7ccbd
