@@ -1,23 +1,24 @@
 package com.javarush.projects;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
         Island island = Island.getInstance();
-        Wolf wolf = new Wolf(0, 0);
-        new Thread(new Rabbit(0, 1)).start();
-        new Thread(new Rabbit(0, 2)).start();
-        new Thread(new Rabbit(1, 0)).start();
-        new Thread(new Rabbit(1, 1)).start();
-        new Thread(new Rabbit(1, 2)).start();
-        new Thread(new Rabbit(2, 2)).start();
-        Thread wolfThread = new Thread(wolf);
-        wolfThread.start();
+        List<Thread> threadList = new ArrayList<>();
+        threadList.add(new Thread(new Wolf(0, 0)));
+        for (int i = 0; i < 3; i++)
+            threadList.add(new Thread(new Rabbit(0, i)));
+        for (Thread thread : threadList)
+            thread.start();
         try {
-            Thread.sleep(10000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
             throw new RuntimeException();
         }
-        wolfThread.interrupt();
+        for (Thread thread : threadList)
+            thread.interrupt();
     }
 }

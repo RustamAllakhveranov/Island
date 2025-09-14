@@ -1,4 +1,5 @@
 package com.javarush.projects;
+
 //Pattern: Class Holder Singleton
 public class Island {
     public static final int WIDTH = 10;
@@ -19,11 +20,7 @@ public class Island {
     }
 
     public Sector getSector(int positionX, int positionY) {
-        if (Validator.isPositionValid(positionX, positionY)) {
-            return island[positionX][positionY];
-        } else {
-            throw new RuntimeException(String.format("Sector[%d][%d] does not exist.", positionX, positionY));
-        }
+        return island[positionX][positionY];
     }
 
     private static final class InstanceHolder {

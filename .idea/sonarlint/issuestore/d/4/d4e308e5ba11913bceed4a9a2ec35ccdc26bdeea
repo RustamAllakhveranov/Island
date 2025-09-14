@@ -1,6 +1,5 @@
 
-g	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(ñ°ÜŽúÿÿÿÿ8ð€Ø¥”3
 1
-java:S1700"Rename field "island"(¿×¨ 8ñ€Ø¥”3
+java:S1700"Rename field "island"(¿×¨ 8¤­ÏÉ”3
 ¶
-java:S6548"˜A Singleton implementation was detected. Make sure the use of the Singleton pattern is required and the implementation is the right one for the context.(‹ÔÇÙ8¨è¾¦”3
+java:S6548"˜A Singleton implementation was detected. Make sure the use of the Singleton pattern is required and the implementation is the right one for the context.(‹ÔÇÙ8¯­ÏÉ”3

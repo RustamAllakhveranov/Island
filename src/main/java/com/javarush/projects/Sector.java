@@ -26,9 +26,10 @@ public class Sector {
         return null;
     }
 
-    public boolean hasSpace(){
+    public boolean hasSpace() {
         return animals.size() < maxResidentsNumber;
     }
+
     public int getPositionX() {
         return positionX;
     }
@@ -43,5 +44,10 @@ public class Sector {
 
     public void removeAnimal(Animal animal) {
         animals.remove(animal);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("сектор [%d][%d]", positionX, positionY);
     }
 }

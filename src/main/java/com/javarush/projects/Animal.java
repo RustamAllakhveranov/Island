@@ -10,28 +10,31 @@ public abstract class Animal implements Runnable {
 
 
     public Animal(int positionX, int positionY, int maxSpeed) {
+        Validator.validatePosition(positionX, positionY);
         this.MAX_SPEED = maxSpeed;
         currentLocation = Island.getInstance().getSector(positionX, positionY);
-        enter(currentLocation);
+        enterSector(currentLocation);
     }
 
-    public void navigate() {
+    public synchronized void navigate() {
         int nextPosX = currentLocation.getPositionX() + getStepsCount();
         int nextPosY = currentLocation.getPositionY() + getStepsCount();
         if (Validator.isPositionValid(nextPosX, nextPosY)) {
-            changePosition(nextPosX, nextPosY);
+            Sector destination = Island.getInstance().getSector(nextPosX, nextPosY);
+            if (destination.hasSpace()) {
+                changePosition(destination);
+            }
         } else {
-            navigate();
+            System.out.println(this + " не может определиться с направлением");
         }
     }
 
     //this method shouldn't be synchronized
 
-    private void changePosition(int positionX, int positionY) {
+    private void changePosition(Sector destination) {
         synchronized (this) {
-            leave(currentLocation);
-            Sector nextLocation = Island.getInstance().getSector(positionX, positionY);
-            enter(nextLocation);
+            leaveSector(currentLocation);
+            enterSector(destination);
 //            System.out.println(this + " changed position on " + positionX + " / " + positionY);
         }
     }
@@ -53,20 +56,20 @@ public abstract class Animal implements Runnable {
 
     protected abstract void launchLifeCycle();
 
-    public synchronized void die() {
+     synchronized void die() {
         isAlive = false;
         System.out.println(this + " dead");
         Thread.currentThread().interrupt();
-        leave(currentLocation);
+        leaveSector(currentLocation);
     }
 
-    public void enter(Sector sector) {
+    private void enterSector(Sector sector) {
         sector.addAnimal(this);
         currentLocation = sector;
-//        System.out.println(String.format("%s left pos: [%s][%s]", this, sector.getPositionX(), sector.getPositionY()));
+        System.out.printf("%s перемещается в %s\n", this, sector);
     }
 
-    public void leave(Sector sector) {
+    private void leaveSector(Sector sector) {
         sector.removeAnimal(this);
         currentLocation = null;
     }

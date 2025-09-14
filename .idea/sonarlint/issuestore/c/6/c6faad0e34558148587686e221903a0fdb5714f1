@@ -1,7 +1,10 @@
 
-p	java:S116"TRename this field "MAX_SPEED" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ë®Ë¢8ûªÝÅ”3
+p	java:S116"TRename this field "MAX_SPEED" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ë®Ë¢8ŠÓÒÊ”3
 U
-java:S5993"9Change the visibility of this constructor to "protected".(þ´™p8üªÝÅ”3
-]	java:S125#"<This block of commented-out lines of code should be removed.(°‹ÑÜûÿÿÿÿ8«ÝÅ”3
-G	java:S106:"+Replace this use of System.out by a logger.(û€˜8„«ÝÅ”3
-]	java:S125B"<This block of commented-out lines of code should be removed.(”¿ïÂùÿÿÿÿ8„«ÝÅ”3
+java:S5993"9Change the visibility of this constructor to "protected".(þ´™p8‹ÓÒÊ”3
+L	java:S106"+Replace this use of System.out by a logger.(ÇÐùÑÿÿÿÿÿ8ÓÒÊ”3
+]	java:S125&"<This block of commented-out lines of code should be removed.(°‹ÑÜûÿÿÿÿ8ÓÒÊ”3
+G	java:S106="+Replace this use of System.out by a logger.(û€˜8ÓÒÊ”3
+n
+java:S3457E"Q%n should be used in place of \n to produce the platform-specific line separator.(»Ž©›8Ü¼ñË”3
+G	java:S106E"+Replace this use of System.out by a logger.(»Ž©›8¿¬¯Ë”3

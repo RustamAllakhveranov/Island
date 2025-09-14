@@ -19,3 +19,9 @@ a
 1src/main/java/com/javarush/projects/Predator.java,9\a\9ade034749cddc7ecf2e5980502b3c2523ff998d
 b
 2src/main/java/com/javarush/projects/Validator.java,4\2\42dc2201abaeb7633aa8d3badbd98feea2d7ccbd
+r
+Bsrc/main/java/com/javarush/projects/NotValidPositionException.java,2\1\2130a7d825170d944f0e35e3069b444634e6aba5
+q
+Asrc/main/java/com/javarush/projects/InValidPositionException.java,a\0\a01760338dc3e2570f988e31a7401cf0ffc1e28f
+q
+Asrc/main/java/com/javarush/projects/InvalidPositionException.java,0\8\088c0bf3aa3dd3cb93dde6bff07dfb4d9db1e2c8

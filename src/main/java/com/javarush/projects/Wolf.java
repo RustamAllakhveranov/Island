@@ -1,6 +1,6 @@
 package com.javarush.projects;
 
-public class Wolf extends Animal implements Predator{
+public class Wolf extends Animal implements Predator {
 
     public Wolf(int positionX, int positionY) {
         super(positionX, positionY, 3);
@@ -18,7 +18,7 @@ public class Wolf extends Animal implements Predator{
 
     public void hunt() {
         Rabbit rabbit = currentLocation.getRabbit();
-        if (rabbit != null && rabbit.isAlive){
+        if (rabbit != null && rabbit.isAlive) {
             rabbit.die();
             System.out.println("RABBIT KILLED!!!");
         }
@@ -27,7 +27,7 @@ public class Wolf extends Animal implements Predator{
 
     protected void launchLifeCycle() {
         System.out.println(this);
-        while(!Thread.currentThread().isInterrupted()){
+        while (!Thread.currentThread().isInterrupted()) {
             hunt();
             navigate();
         }
