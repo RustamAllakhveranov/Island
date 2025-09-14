@@ -1,5 +1,5 @@
 package com.javarush.projects;
-
+//Pattern: Class Holder Singleton
 public class Island {
     public static final int WIDTH = 10;
     public static final int HEIGHT = 10;

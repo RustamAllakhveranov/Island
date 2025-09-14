@@ -2,9 +2,11 @@ package com.javarush.projects;
 
 public class Validator {
     public static boolean isPositionValid(int positionX, int positionY) {
+        Sector sector = Island.getInstance().getSector(positionX, positionY);
         return positionX >= 0
                 && positionX < Island.WIDTH
                 && positionY >= 0
-                && positionY < Island.HEIGHT;
+                && positionY < Island.HEIGHT
+                && sector.hasSpace();
     }
 }

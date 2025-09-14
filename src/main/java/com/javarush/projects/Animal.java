@@ -7,10 +7,9 @@ public abstract class Animal implements Runnable {
     double weight;
     Sector currentLocation;
     boolean isAlive = true;
-    Thread currentThread;
+
 
     public Animal(int positionX, int positionY, int maxSpeed) {
-        currentThread = Thread.currentThread();
         this.MAX_SPEED = maxSpeed;
         currentLocation = Island.getInstance().getSector(positionX, positionY);
         enter(currentLocation);
@@ -44,20 +43,20 @@ public abstract class Animal implements Runnable {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + Integer.toHexString(hashCode());
+        return Thread.currentThread().getName() + " " + getClass().getSimpleName();
     }
 
     @Override
     public void run() {
-//        launchLifeCycle();
+        launchLifeCycle();
     }
 
-//    protected abstract void launchLifeCycle(){}
+    protected abstract void launchLifeCycle();
 
     public synchronized void die() {
         isAlive = false;
-        System.out.println(currentThread.getName());
-        currentThread.interrupt();
+        System.out.println(this + " dead");
+        Thread.currentThread().interrupt();
         leave(currentLocation);
     }
 

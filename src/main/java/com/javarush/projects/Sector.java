@@ -1,13 +1,13 @@
 package com.javarush.projects;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
 public class Sector {
     private final int positionX;
     private final int positionY;
+    private final static int maxResidentsNumber = 3;
     private List<Animal> animals = Collections.synchronizedList(new ArrayList<>());
 
     public Sector(int positionX, int positionY) {
@@ -15,8 +15,9 @@ public class Sector {
         this.positionY = positionY;
     }
 
+    //Итерировать synchronizedList по-прежнему нужно синхронизованно!
 
-    public synchronized Rabbit findRabbits() {
+    public synchronized Rabbit getRabbit() {
         for (Animal animal : animals) {
             if (animal instanceof Rabbit) {
                 return (Rabbit) animal;
@@ -25,6 +26,9 @@ public class Sector {
         return null;
     }
 
+    public boolean hasSpace(){
+        return animals.size() < maxResidentsNumber;
+    }
     public int getPositionX() {
         return positionX;
     }

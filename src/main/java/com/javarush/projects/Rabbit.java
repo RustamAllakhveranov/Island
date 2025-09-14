@@ -1,6 +1,6 @@
 package com.javarush.projects;
 
-public class Rabbit extends Animal{
+public class Rabbit extends Animal {
     public Rabbit(int positionX, int positionY) {
         super(positionX, positionY, 2);
         weight = 2;
@@ -8,6 +8,11 @@ public class Rabbit extends Animal{
 
     @Override
     public void run() {
-        System.out.println(Thread.currentThread().getName() + " "+  getClass().getSimpleName());
+        System.out.println(this);
+    }
+
+    @Override
+    protected void launchLifeCycle() {
+        while (!Thread.currentThread().isInterrupted()) navigate();
     }
 }

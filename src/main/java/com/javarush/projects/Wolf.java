@@ -7,8 +7,6 @@ public class Wolf extends Animal implements Predator{
         weight = 50;
     }
 
-
-
     public void eatRabbit(Rabbit rabbit) {
         rabbit.die();
     }
@@ -19,7 +17,7 @@ public class Wolf extends Animal implements Predator{
     }
 
     public void hunt() {
-        Rabbit rabbit = currentLocation.findRabbits();
+        Rabbit rabbit = currentLocation.getRabbit();
         if (rabbit != null && rabbit.isAlive){
             rabbit.die();
             System.out.println("RABBIT KILLED!!!");
@@ -28,8 +26,8 @@ public class Wolf extends Animal implements Predator{
 
 
     protected void launchLifeCycle() {
-        System.out.println(currentThread.getName());
-        while(currentThread.isInterrupted()){
+        System.out.println(this);
+        while(!Thread.currentThread().isInterrupted()){
             hunt();
             navigate();
         }
