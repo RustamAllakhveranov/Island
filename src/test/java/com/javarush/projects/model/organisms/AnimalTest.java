@@ -1,6 +1,5 @@
 package com.javarush.projects.model.organisms;
 
-import com.javarush.projects.model.exceptions.InvalidPositionException;
 import com.javarush.projects.model.island.Island;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
