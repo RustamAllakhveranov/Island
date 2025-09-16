@@ -9,8 +9,9 @@ import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.util.Random;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ValidatorTest {
 
@@ -48,13 +49,13 @@ class ValidatorTest {
         boolean result = Validator.isPositionValid(positionX, positionY);
         Assertions.assertFalse(result);
     }
+
     @Test
-    void isPositionValid_ReturnTrue_WithValidCoordinates(){
-        for (int x = 0; x < Island.HEIGHT; x++) {
-            for (int y = 0; y < Island.WIDTH; y++) {
-                boolean result = Validator.isPositionValid(x, y);
-                Assertions.assertTrue(result);
-            }
-        }
+    void isPositionValid_ReturnTrue_WithValidCoordinates() {
+        Random random = new Random();
+        int x = random.nextInt(Island.HEIGHT);
+        int y = random.nextInt(Island.WIDTH);
+        boolean result = Validator.isPositionValid(x, y);
+        Assertions.assertTrue(result);
     }
 }

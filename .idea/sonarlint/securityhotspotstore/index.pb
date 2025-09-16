@@ -21,3 +21,5 @@ v
 Fsrc/test/java/com/javarush/projects/model/utilities/ValidatorTest.java,c\0\c0eab37c763eb9a81e24cbbf7344569df0c4f285
 s
 Csrc/test/java/com/javarush/projects/model/organisms/AnimalTest.java,8\5\858043456cee211cd80281bef7f954c5421da4d6
+q
+Asrc/main/java/com/javarush/projects/model/organisms/Predator.java,f\b\fbcad5a192753e9b942064b8a803a5efdf087d94

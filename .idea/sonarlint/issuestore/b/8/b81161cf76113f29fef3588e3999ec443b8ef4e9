@@ -1,4 +1,4 @@
 
-{	java:S115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(¶àĞ¬üÿÿÿÿ8±ÀÊÈ”3
-g
-java:S1124"EReorder the modifiers to comply with the Java Language Specification.(¶àĞ¬üÿÿÿÿ8´ÀÊÈ”3
+{	java:S115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(«é¨¿ùÿÿÿÿ8±ÀÊÈ”3
+h
+java:S6201"FReplace this instanceof check and cast with 'instanceof Rabbit rabbit'(ï…Ğüıÿÿÿÿ8åÁõ”3

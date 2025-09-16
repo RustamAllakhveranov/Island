@@ -4,29 +4,24 @@ public class Wolf extends Animal implements Predator {
 
     public Wolf(int positionX, int positionY) {
         super(positionX, positionY, 3);
-        weight = 50;
+        weight.add(50);
     }
-
-    public void eatRabbit(Rabbit rabbit) {
-        rabbit.die();
-    }
-
+//вроде как синхронизация не нужна, она есть внутри метода die()
     @Override
     public void eatAnimal(Animal animal) {
         animal.die();
     }
 
+//проверка двух условий должна происходить синхронно, иначе будут косяки
     public void hunt() {
         Rabbit rabbit = currentLocation.getRabbit();
         if (rabbit != null && rabbit.isAlive) {
             rabbit.die();
-            System.out.println("RABBIT KILLED!!!");
+            System.out.println("Killer of " + rabbit + " is: " + this);
         }
     }
-
-
+//переписать однозначно
     protected void launchLifeCycle() {
-        System.out.println(this);
         while (!Thread.currentThread().isInterrupted()) {
             hunt();
             navigate();

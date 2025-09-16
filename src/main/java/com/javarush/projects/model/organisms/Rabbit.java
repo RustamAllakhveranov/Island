@@ -3,15 +3,10 @@ package com.javarush.projects.model.organisms;
 public class Rabbit extends Animal {
     public Rabbit(int positionX, int positionY) {
         super(positionX, positionY, 2);
-        weight = 2;
+        weight.add(2);
     }
 
-    @Override
-    public void run() {
-        System.out.println(this);
-        launchLifeCycle();
-    }
-
+    //переписать однозначно
     @Override
     protected void launchLifeCycle() {
         while (!Thread.currentThread().isInterrupted()){

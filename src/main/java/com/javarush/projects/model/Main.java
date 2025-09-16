@@ -18,6 +18,7 @@ public class Main {
             thread.start();
         try {
             Thread.sleep(1000);
+            System.out.println("STOP SIMULATION!");
         } catch (InterruptedException e) {
             e.printStackTrace();
             throw new RuntimeException();

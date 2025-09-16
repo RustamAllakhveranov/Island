@@ -4,6 +4,7 @@ import com.javarush.projects.model.exceptions.InvalidPositionException;
 import com.javarush.projects.model.island.Island;
 
 //Идеально!
+//Синхронизировать не нужно: методы validatePosition/isPositionValid - статические, данные не изменяются
 public class Validator {
     public static void validatePosition(int positionX, int positionY) throws InvalidPositionException {
         if (!isPositionValid(positionX, positionY)) {

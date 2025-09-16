@@ -18,7 +18,7 @@ public class Island {
             }
         }
     }
-
+    //синхронизация не требуется
     public Sector getSector(int positionX, int positionY) {
         return island[positionX][positionY];
     }
@@ -26,7 +26,7 @@ public class Island {
     private static final class InstanceHolder {
         private static final Island INSTANCE = new Island();
     }
-
+    //синхронизация не требуется
     public static Island getInstance() {
         return InstanceHolder.INSTANCE;
     }
