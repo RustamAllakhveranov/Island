@@ -1,8 +1,6 @@
 
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
-c
-3src/main/java/com/javarush/projects/model/Main.java,b\1\b1b00c95a56a6e00b53c0fadc2d68fc4ad4df5ab
 l
 <src/main/java/com/javarush/projects/model/island/Sector.java,b\8\b81161cf76113f29fef3588e3999ec443b8ef4e9
 l
@@ -23,3 +21,9 @@ s
 Csrc/test/java/com/javarush/projects/model/organisms/AnimalTest.java,8\5\858043456cee211cd80281bef7f954c5421da4d6
 q
 Asrc/main/java/com/javarush/projects/model/organisms/Predator.java,f\b\fbcad5a192753e9b942064b8a803a5efdf087d94
+o
+?src/main/java/com/javarush/projects/controller/GameManager.java,f\b\fb4bf3f2479567104cc69aa4de7a716b6b926606
+]
+-src/main/java/com/javarush/projects/Main.java,b\d\bd0cf8fdd5f5c1262311dc2057fafe594206ce96
+‚
+Rsrc/main/java/com/javarush/projects/model/exceptions/SameDestinationException.java,1\c\1c517b43fb4eb105dcbb6fe182c737b6a70fd56f

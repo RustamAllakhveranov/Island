@@ -1,24 +1,32 @@
 package com.javarush.projects.model.island;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 //Pattern: Class Holder Singleton
 public class Island {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Island.class.getName());
     public static final int WIDTH = 10;
     public static final int HEIGHT = 10;
     private final Sector[][] island;
 
     private Island() {
+        LOGGER.info("Начало создания острова. Размеры: {} x {}", WIDTH, HEIGHT);
         island = new Sector[WIDTH][HEIGHT];
         splitIslandToSectors();
+        LOGGER.info("Остров создан!");
     }
 
     private void splitIslandToSectors() {
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
                 island[x][y] = new Sector(x, y);
+                LOGGER.debug("Инициализирован сектор[{}][{}]", x, y);
             }
         }
     }
     //синхронизация не требуется
+    //логирование не требуется
     public Sector getSector(int positionX, int positionY) {
         return island[positionX][positionY];
     }
@@ -27,6 +35,7 @@ public class Island {
         private static final Island INSTANCE = new Island();
     }
     //синхронизация не требуется
+    //логирование не требуется
     public static Island getInstance() {
         return InstanceHolder.INSTANCE;
     }

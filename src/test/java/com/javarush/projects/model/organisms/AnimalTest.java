@@ -1,16 +1,11 @@
 package com.javarush.projects.model.organisms;
 
-import com.javarush.projects.model.island.Island;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class AnimalTest {
-    @BeforeAll
-    static void initIsland() {
-        Island island = Island.getInstance();
-    }
 
     @Test
     void navigate_Does_Not_Throw_ArrayIndexOutOfBoundsException() {
@@ -19,5 +14,13 @@ class AnimalTest {
             animal.navigate();
         }
         assertDoesNotThrow(() -> new ArrayIndexOutOfBoundsException());
+    }
+
+    @Test
+    void navigate_Does_Not_Choose_Previous_Position() {
+        Animal wolf = new Wolf(0, 0);
+        for (int i = 0; i < 10000; i++) {
+            Assertions.assertDoesNotThrow(wolf::navigate);
+        }
     }
 }

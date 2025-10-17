@@ -3,7 +3,6 @@ package com.javarush.projects.model.utilities;
 import com.javarush.projects.model.exceptions.InvalidPositionException;
 import com.javarush.projects.model.island.Island;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,13 +13,6 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ValidatorTest {
-
-    private static Island island;
-
-    @BeforeAll
-    static void initIsland() {
-        island = Island.getInstance();
-    }
 
     @ParameterizedTest
     @CsvSource({

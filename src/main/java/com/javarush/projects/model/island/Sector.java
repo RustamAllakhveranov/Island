@@ -2,16 +2,20 @@ package com.javarush.projects.model.island;
 
 import com.javarush.projects.model.organisms.Animal;
 import com.javarush.projects.model.organisms.Rabbit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
 public class Sector {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Sector.class);
     private final int positionX;
     private final int positionY;
-    private static final int maxResidentsNumber = 3;
-    private final List<Animal> animals = Collections.synchronizedList(new ArrayList<>(maxResidentsNumber));
+    private static final int MAX_RESIDENTS_NUMBER = 3;
+    private final List<Animal> animals = Collections.synchronizedList(new ArrayList<>(MAX_RESIDENTS_NUMBER));
 
     public Sector(int positionX, int positionY) {
         this.positionX = positionX;
@@ -21,15 +25,17 @@ public class Sector {
     //Итерировать synchronizedList по-прежнему нужно синхронизованно!
     public synchronized Rabbit getRabbit() {
         for (Animal animal : animals) {
-            if (animal instanceof Rabbit) {
-                return (Rabbit) animal;
+            if (animal instanceof Rabbit rabbit) {
+                return rabbit;
             }
         }
         return null;
     }
     //синхронизация не требуется: список синхронизован
     public boolean hasSpace() {
-        return animals.size() < maxResidentsNumber;
+        int residentsCount = animals.size();
+        LOGGER.debug("Количество животных в секторе {}: {}", this, residentsCount);
+        return residentsCount < MAX_RESIDENTS_NUMBER;
     }
     //синхронизация не требуется: геттер
     public int getPositionX() {
@@ -50,6 +56,6 @@ public class Sector {
 
     @Override
     public String toString() {
-        return String.format("сектор [%d][%d]", positionX, positionY);
+        return String.format("[%d][%d]", positionX, positionY);
     }
 }
