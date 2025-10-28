@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Configuration status="TRACE" name="island" packages="">
+<Configuration status="ERROR" name="island" packages="">
     <Appenders>
         <File name="FileLogger"
               fileName="logs/island.log"
@@ -13,7 +13,7 @@
         </Async>
     </Appenders>
     <Loggers>
-        <Root level="info" additivity="false">
+        <Root level="debug" >
             <AppenderRef ref="AsyncFileLogger"/>
         </Root>
     </Loggers>

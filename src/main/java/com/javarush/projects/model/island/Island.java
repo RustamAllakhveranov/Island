@@ -18,12 +18,14 @@ public class Island {
     }
 
     private void splitIslandToSectors() {
+        LOGGER.trace("Начало инициализации секторов.");
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
                 island[x][y] = new Sector(x, y);
-                LOGGER.debug("Инициализирован сектор[{}][{}]", x, y);
+                LOGGER.trace("Инициализирован сектор[{}][{}]", x, y);
             }
         }
+        LOGGER.trace("Все сектора инициализированы.");
     }
     //синхронизация не требуется
     //логирование не требуется

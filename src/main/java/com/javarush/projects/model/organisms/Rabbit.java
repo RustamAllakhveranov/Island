@@ -1,21 +1,9 @@
 package com.javarush.projects.model.organisms;
 
-public class Rabbit extends Animal {
-    public Rabbit(int positionX, int positionY) {
-        super(positionX, positionY, 2);
-        weight.add(2);
-    }
+import com.javarush.projects.model.organisms.Herbivore;
 
-    //переписать однозначно
-    @Override
-    protected void launchLifeCycle() {
-        while (!Thread.currentThread().isInterrupted()){
-            navigate();
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
+public class Rabbit extends Herbivore {
+    public Rabbit(int positionX, int positionY) {
+        super(positionX, positionY);
     }
 }

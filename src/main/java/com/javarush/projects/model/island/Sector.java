@@ -1,7 +1,9 @@
 package com.javarush.projects.model.island;
 
+import com.javarush.projects.model.metadata.AnimalSpecies;
 import com.javarush.projects.model.organisms.Animal;
-import com.javarush.projects.model.organisms.Rabbit;
+import com.javarush.projects.model.organisms.Organism;
+import com.javarush.projects.model.organisms.Plant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +17,8 @@ public class Sector {
     private final int positionX;
     private final int positionY;
     private static final int MAX_RESIDENTS_NUMBER = 3;
-    private final List<Animal> animals = Collections.synchronizedList(new ArrayList<>(MAX_RESIDENTS_NUMBER));
+    private final List<Animal> animals = Collections.synchronizedList(new ArrayList<>());
+    private final List<Plant> plants = Collections.synchronizedList(new ArrayList<>());
 
     public Sector(int positionX, int positionY) {
         this.positionX = positionX;
@@ -23,35 +26,52 @@ public class Sector {
     }
 
     //Итерировать synchronizedList по-прежнему нужно синхронизованно!
-    public synchronized Rabbit getRabbit() {
+    //метод под вопросом
+    public synchronized Organism getOrganism(AnimalSpecies species) {
         for (Animal animal : animals) {
-            if (animal instanceof Rabbit rabbit) {
-                return rabbit;
+            if (animal.getClass().getSimpleName().equals(species.getNormalName())) {
+                return animal;
             }
         }
         return null;
     }
+
+    public List<Animal> getAnimals() {
+        return animals;
+    }
+
     //синхронизация не требуется: список синхронизован
     public boolean hasSpace() {
         int residentsCount = animals.size();
-        LOGGER.debug("Количество животных в секторе {}: {}", this, residentsCount);
         return residentsCount < MAX_RESIDENTS_NUMBER;
     }
+
     //синхронизация не требуется: геттер
     public int getPositionX() {
         return positionX;
     }
+
     //синхронизация не требуется: геттер
     public int getPositionY() {
         return positionY;
     }
+
     //синхронизация не требуется: список синхронизован
     public void addAnimal(Animal animal) {
         animals.add(animal);
     }
+
     //синхронизация не требуется: список синхронизован
     public void removeAnimal(Animal animal) {
         animals.remove(animal);
+    }
+
+    public List<Plant> getPlants() {
+        return plants;
+    }
+
+    public void addPlant(Plant plant) {
+        plants.add(plant);
     }
 
     @Override
