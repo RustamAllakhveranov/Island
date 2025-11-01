@@ -1,7 +1,8 @@
 
-g	java:S112#"FDefine and throw a dedicated exception instead of using a generic one.(¯åÕøÿÿÿÿ8×û¿Ş¡3
-W	java:S125"<This block of commented-out lines of code should be removed.(÷ÂíK8çû¿Ş¡3
+g	java:S112#"FDefine and throw a dedicated exception instead of using a generic one.(¯åÕøÿÿÿÿ8¬ğ—Ş£3
 {
-java:S2142!"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(ä ¹€8çû¿Ş¡3
-K
-java:S11449".Remove this unused private "addWolves" method.(Í··é8çÅÑß¡3
+java:S2142!"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(ä ¹€8½ğ—Ş£3
+c
+java:S1128"FRemove this unused import 'com.javarush.projects.model.island.Sector'.(˜œª×8¶Æ‚ú£3
+`
+java:S1128"CRemove this unused import 'java.util.concurrent.ThreadLocalRandom'.(¨ÏÙî8¶Æ‚ú£3

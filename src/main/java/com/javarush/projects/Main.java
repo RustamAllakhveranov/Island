@@ -11,5 +11,11 @@ public class Main {
         LOGGER.debug("Main started!");
         GameManager gameManager = new GameManager();
         gameManager.startSimulation(1);
+//        Menu[] menu = FoodPreferences.getMenu(OrganismSpecies.WOLF);
+//        int number = ThreadLocalRandom.current().nextInt(menu.length);
+//        String menu1 = menu[number].toString();
+//        System.out.println(menu1);
+//        Class<? extends Organism> organismClass = OrganismSpecies.valueOf(menu1).getOrganismClass();
+//        System.out.println(organismClass);
     }
 }

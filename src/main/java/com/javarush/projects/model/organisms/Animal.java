@@ -1,67 +1,37 @@
 package com.javarush.projects.model.organisms;
 
+import com.javarush.projects.model.exceptions.ErasingException;
 import com.javarush.projects.model.exceptions.InvalidDestinationException;
 import com.javarush.projects.model.island.Island;
 import com.javarush.projects.model.island.Sector;
-import com.javarush.projects.model.metadata.AnimalSpecies;
 import com.javarush.projects.model.utilities.Validator;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.DoubleAdder;
 
 public abstract class Animal extends Organism {
-
-    private final AnimalSpecies animalSpecies;
     private final double maxSaturation;
     private final int maxSpeed;
-    //DoubleAdder уже синхронизован внутри класса
-    private DoubleAdder currentSaturation;
+    private final DoubleAdder currentSaturation;
 
-    //в конструкторе не нужно ничего синхронизовать, отрабатывается полностью до получения ссылки на объект
-    //модификатор protected не менять!
     protected Animal(int positionX, int positionY) {
         super(positionX, positionY);
+        maxSaturation = getOrganismSpecies().getMaxSaturation();
         currentSaturation = new DoubleAdder();
-        animalSpecies = AnimalSpecies.valueOf(getClass().getSimpleName().toUpperCase());
-        maxSaturation = getAnimalSpecies().getMaxSaturation();
-        bodyWeight.add(animalSpecies.getWeight());
-        this.maxSpeed = animalSpecies.getSpeed();
+        currentSaturation.add(maxSaturation);
+        this.maxSpeed = getOrganismSpecies().getSpeed();
         enterSector(currentLocation);
     }
-//    public Organism choosePrey() {
-//
-//
-//        Set<AnimalSpecies> menu = FoodPreferences.getMenu(this.getClass());
-//        Organism prey = currentLocationAnimals.stream().
-//                filter(o -> FoodPreferences.isItInMenu(this, o)).
-//                findFirst().
-//                orElse(null);
-//
-//        return prey;
-//    }
 
-//    public void hunt() {
-//        //выясняем кто есть в секторе
-//        List<Animal> currentLocationAnimals = currentLocation.getAnimals();
-//        //оцениваем каждого на съедобность опираясь на свои предпочтения
-//        Organism prey = currentLocationAnimals.stream().
-//                filter(o -> FoodPreferences.isItInMenu(this, o)).
-//                findFirst().
-//                orElse(null);
-    //если находим первого съедобного - узнаем каковы шансы его поймать
-    //пытаемся поймать
-    //если никого подходящего нет - идем в другой сектор и чекаем там
-//        int index = ThreadLocalRandom.current().nextInt(0, 1);
-//        Organism prey = choosePrey();
-//        LOGGER.info("{} выходит охотится на {}!", this, prey);
-//        Organism organism = currentLocation.getOrganism(prey);
-//        synchronized (this) {
-//            if (rabbit != null && rabbit.isAlive) {
-//                LOGGER.info("{} убивает {}", this, rabbit);
-//                rabbit.die();
-//           }
-//     }
-//    }
+    @Override
+    protected void eraseBody() {
+        boolean removed = currentLocation.removeAnimal(this);
+        if (removed) {
+            LOGGER.debug("{} erased from {}", this, currentLocation);
+        } else {
+            throw new ErasingException(String.format("%s wasn't erased from %s", this, currentLocation));
+        }
+    }
 
     protected synchronized void launchLifeCycle() {
         while (isAlive()) {
@@ -74,48 +44,44 @@ public abstract class Animal extends Organism {
         }
     }
 
-    protected Double getCurrentSaturation() {
+    protected double getCurrentSaturation() {
         return currentSaturation.doubleValue();
     }
 
-    protected synchronized void increaseSaturation(Double saturation) {
+    protected synchronized void increaseSaturation(double saturation) {
         Validator.validateWeight(saturation);
         currentSaturation.add(saturation);
-        if (getCurrentSaturation() == getAnimalSpecies().getMaxSaturation()) {
+        if (getCurrentSaturation() == getOrganismSpecies().getMaxSaturation()) {
             LOGGER.debug("{} наелся до отвала!", this);
         }
     }
 
-    protected synchronized void decreaseSaturation(Double saturation) {
+    protected synchronized void decreaseSaturation(double saturation) {
         Validator.validateWeight(saturation);
-        currentSaturation.add(-saturation);
-        LOGGER.debug("{} теряет насыщение: {}. Текущий уровень: {}", this, saturation, currentSaturation.doubleValue());
-        if (currentSaturation.doubleValue() <= 0) {
+        double decreasedValue = Math.min(saturation, getCurrentSaturation());
+        currentSaturation.add(-decreasedValue);
+        LOGGER.debug("{} теряет насыщение: {}. Текущий уровень: {}", this, decreasedValue, getCurrentSaturation());
+        Validator.validateWeight(getCurrentSaturation());
+        if (getCurrentSaturation() == 0) {
             die();
         }
     }
 
-    protected synchronized Double getRequiredFoodWeight() {
+    protected synchronized double getRequiredFoodWeight() {
         double requiredFoodWeight = maxSaturation - getCurrentSaturation();
         Validator.validateWeight(requiredFoodWeight);
         return requiredFoodWeight;
     }
 
     protected boolean isHungry() {
-        return getCurrentSaturation() < getAnimalSpecies().getMaxSaturation() / 2;
+        return getCurrentSaturation() < getOrganismSpecies().getMaxSaturation() / 2;
     }
 
     protected abstract void tryToSatisfyHunger();
 
-    protected abstract Organism findFood();
 
     private int getStepsCount() {
         return ThreadLocalRandom.current().nextInt(-maxSpeed, maxSpeed + 1);
-    }
-
-    @Override
-    public String toString() {
-        return getName();
     }
 
     private void enterSector(Sector sector) {
@@ -136,7 +102,7 @@ public abstract class Animal extends Organism {
         if (currentLocation == destination) {
             throw new InvalidDestinationException(String.format("Current location: %s, destination: %s", currentLocation, destination));
         }
-        LOGGER.info("{} перемещается из {} в {}", getName(), currentLocation, destination);
+        LOGGER.info("{} перемещается из {} в {}", this, currentLocation, destination);
         synchronized (this) {
             leaveSector(currentLocation);
             enterSector(destination);
@@ -149,15 +115,11 @@ public abstract class Animal extends Organism {
         int nextPosY = currentLocation.getPositionY() + getStepsCount();
         if (Validator.isPositionValid(nextPosX, nextPosY)) {
             Sector destination = Island.getInstance().getSector(nextPosX, nextPosY);
-            if (currentLocation != destination && destination.hasSpace()) {
+            if (currentLocation != destination && destination.hasSpaceForAnimal(this.getClass())) {
                 changePosition(destination);
             }
         } else {
-            LOGGER.info("{} не может определиться с направлением", getName());
+            LOGGER.info("{} не может определиться с направлением", this);
         }
-    }
-
-    public AnimalSpecies getAnimalSpecies() {
-        return animalSpecies;
     }
 }

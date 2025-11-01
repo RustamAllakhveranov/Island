@@ -1,68 +1,89 @@
 package com.javarush.projects.model.organisms;
 
-import com.javarush.projects.model.metadata.FoodPreferences;
-import com.javarush.projects.model.utilities.Validator;
+import com.javarush.projects.model.metadata.PredatorPreferences;
 
-import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Predator extends Animal {
-    public Predator(int positionX, int positionY) {
+    protected Predator(int positionX, int positionY) {
         super(positionX, positionY);
     }
 
-    @Override
-    protected Organism findFood() {
-        LOGGER.info("{} ищет еду!", this);
-        List<Animal> animalList = currentLocation.getAnimals();
+    //
+    protected synchronized void tryToSatisfyHunger() {
+        hunt();
+    }
+
+    private void hunt() {
         synchronized (this) {
-            if (!animalList.isEmpty()) {
-                for (Animal animal : animalList) {
-                    if (FoodPreferences.isItInMenu(this, animal)) {
-                        LOGGER.info("{} found animal!", this);
-                        return animal;
-                    } else {
-                        LOGGER.debug("{} is not in menu of {}", animal, this);
-                    }
+            Class<? extends Animal> preyClass = getNextPreyClass();
+            if (PredatorPreferences.isItInMenu(getClass(), preyClass)) {
+                Animal animal = findPrey(preyClass);
+                if(animal == null){
+                    throw new NullPointerException(String.format("Prey of %s is: %s", this, animal));
+                }
+                LOGGER.debug("{} нашел еду: {}", this, animal);
+                if (animal.isAlive()) {
+                    int chancesToKill = PredatorPreferences.getChancesToKill(getClass(), preyClass);
+                    LOGGER.debug("{} пытается убить {}", this, animal);
+                    tryToKill(chancesToKill, animal);
+                }
+                if (isDead()) {
+                    tryToEatAnimal(animal);
                 }
             }
-            LOGGER.debug("{} didn't find food at {}", this, currentLocation);
-            return null;
         }
-
-
     }
-    //вроде как синхронизация не нужна, она есть внутри метода die()
 
-    public void eatAnimal(Animal animal) {
-        LOGGER.trace("{} trying to eat plant in {}", this, currentLocation);
-        double requiredFoodWeight = getRequiredFoodWeight();
-        Validator.validateWeight(requiredFoodWeight);
+
+    private Class<? extends Animal> getNextPreyClass() {
+        Set<Class<? extends Animal>> residentsTypes = currentLocation.getResidentsTypes();
+        int preyClassIndex = ThreadLocalRandom.current().nextInt(residentsTypes.size());
+        return residentsTypes.stream()
+                .toList()
+                .get(preyClassIndex);
+    }
+
+    //tryToKill: не синхронизовывать
+
+    //синхронизован
+    //killAnimal: не синхронизовывать
+    protected Animal findPrey(Class<? extends Animal> preyClass) {
         synchronized (this) {
-            double foodWeightToAcquire;
-            double preyBodyWeight = animal.getBodyWeight();
-            Validator.validateWeight(preyBodyWeight);
-            if (preyBodyWeight <= requiredFoodWeight) {
-                foodWeightToAcquire = preyBodyWeight;
-                Validator.validateWeight(foodWeightToAcquire);
-            } else {
-                foodWeightToAcquire = requiredFoodWeight;
-                Validator.validateWeight(foodWeightToAcquire);
-            }
-            LOGGER.debug("{} начинает есть {}", this, animal);
-            animal.decreaseBodyWeight(foodWeightToAcquire);
-            increaseSaturation(foodWeightToAcquire);
-            LOGGER.debug(
-                    "{} съел {} кг {}. Насыщение: {}. Вес остатков добычи: {}",
-                    this, foodWeightToAcquire, animal, getCurrentSaturation(), animal.getBodyWeight()
-            );
+            LOGGER.debug("{} ищет еду в секторе{}", this, currentLocation);
+            return currentLocation.getOrCreateAnimalSet(preyClass)
+                    .stream()
+                    .findFirst()
+                    .orElse(null);
         }
     }
 
-    @Override
-    protected void tryToSatisfyHunger() {
-        Animal animal = (Animal) findFood();
-        if (animal != null) {
-            eatAnimal(animal);
+    private void tryToKill(int chancesToKill, Animal animal) {
+        if (isLucky(chancesToKill)) {
+            killAnimal(animal);
         }
     }
+
+    private void killAnimal(Animal animal) {
+        animal.die();
+    }
+
+    private void tryToEatAnimal(Animal animal) {
+        LOGGER.debug("{} trying to eat {} in {}", this, animal, currentLocation);
+        synchronized (this) {
+            double foodEaten = animal.decreaseBodyWeight(getRequiredFoodWeight());
+            if (foodEaten > 0) {
+                increaseSaturation(foodEaten);
+                LOGGER.debug(
+                        "{} съел {} кг {}. Насыщение: {}. Вес остатков еды: {}",
+                        this, foodEaten, animal, getCurrentSaturation(), animal.getBodyWeight()
+                );
+            } else {
+                LOGGER.debug("{} не успел съесть {}", this, animal);
+            }
+        }
+    }
+
+
 }

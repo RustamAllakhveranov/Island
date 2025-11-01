@@ -1,3 +1,5 @@
 
 y
-java:S3077"WUse a thread-safe type; adding "volatile" is not enough to make this field thread-safe.(ö“Õ‹ýÿÿÿÿ8÷¤ºã¡3
+java:S3077"WUse a thread-safe type; adding "volatile" is not enough to make this field thread-safe.(ö“Õ‹ýÿÿÿÿ8–›ÜÕ£3
+q
+java:S1128"TRemove this unused import 'com.javarush.projects.model.exceptions.ErasingException'.(‹´¸±8ÞŠàÕ£3

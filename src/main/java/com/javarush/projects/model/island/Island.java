@@ -8,11 +8,11 @@ public class Island {
     private static final Logger LOGGER = LoggerFactory.getLogger(Island.class.getName());
     public static final int WIDTH = 10;
     public static final int HEIGHT = 10;
-    private final Sector[][] island;
+    private final Sector[][] islandSectors;
 
     private Island() {
         LOGGER.info("Начало создания острова. Размеры: {} x {}", WIDTH, HEIGHT);
-        island = new Sector[WIDTH][HEIGHT];
+        islandSectors = new Sector[WIDTH][HEIGHT];
         splitIslandToSectors();
         LOGGER.info("Остров создан!");
     }
@@ -21,7 +21,7 @@ public class Island {
         LOGGER.trace("Начало инициализации секторов.");
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
-                island[x][y] = new Sector(x, y);
+                islandSectors[x][y] = new Sector(x, y);
                 LOGGER.trace("Инициализирован сектор[{}][{}]", x, y);
             }
         }
@@ -30,7 +30,7 @@ public class Island {
     //синхронизация не требуется
     //логирование не требуется
     public Sector getSector(int positionX, int positionY) {
-        return island[positionX][positionY];
+        return islandSectors[positionX][positionY];
     }
 
     private static final class InstanceHolder {

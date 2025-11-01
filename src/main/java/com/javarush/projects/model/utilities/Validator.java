@@ -33,8 +33,9 @@ public class Validator {
 
     public static void validateWeight(Double weight) {
         if (weight < 0) {
-            LOGGER.error(weight.toString());
-            throw new InvalidWeightException("Weight cannot be negative.");
+            String message = String.format("Weight cannot be negative: %d", weight);
+            LOGGER.error(message);
+            throw new InvalidWeightException(message);
         }
     }
 }
