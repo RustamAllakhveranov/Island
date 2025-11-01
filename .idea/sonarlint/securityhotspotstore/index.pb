@@ -71,13 +71,11 @@ m
 =src/main/java/com/javarush/projects/model/organisms/Wolf.java,d\1\d1dd422b2eb9d3d0dc798ec0cefd0e61549f53ce
 {
 Ksrc/main/java/com/javarush/projects/model/metadata/PredatorPreferences.java,1\7\17251585c40dd67726801e055eb9f129b13a13df
-x
-Hsrc/main/java/com/javarush/projects/controller/ConcreteBiotaBuilder.java,4\a\4a0254938fcc9c8bbac5aaa066ef936610306987
 p
 @src/main/java/com/javarush/projects/controller/BiotaBuilder.java,2\b\2bcf4a984452aeb6ce307119e74092796eb62497
-t
-Dsrc/main/java/com/javarush/projects/controller/ThreadController.java,1\6\16e5587d29d69851ce08412a4ebc0c4ca984728d
 i
 9src/main/java/com/javarush/projects/controller/Biota.java,c\6\c6b78356c3fc2fda8606d921ff8a7be9e86df4aa
 x
 Hsrc/main/java/com/javarush/projects/controller/StandardBiotaBuilder.java,f\a\fa61a07685f2276966b63fd120cfbb671101dfd0
+€
+Psrc/main/java/com/javarush/projects/model/exceptions/BiotaCreatingException.java,f\e\fe201bb3aea29dec72ed2ac74fd210855ec3ab3e

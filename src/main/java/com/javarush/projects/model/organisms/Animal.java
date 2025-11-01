@@ -14,8 +14,8 @@ public abstract class Animal extends Organism {
     private final int maxSpeed;
     private final DoubleAdder currentSaturation;
 
-    protected Animal(int positionX, int positionY) {
-        super(positionX, positionY);
+    protected Animal(Sector startPosition) {
+        super(startPosition);
         maxSaturation = getOrganismSpecies().getMaxSaturation();
         currentSaturation = new DoubleAdder();
         currentSaturation.add(maxSaturation);

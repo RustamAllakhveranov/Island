@@ -74,7 +74,7 @@ public class Sector {
         return plants;
     }
 
-    private synchronized boolean hasSpaceForPlant() {
+    public synchronized boolean hasSpaceForPlant() {
         return plants.size() <= OrganismSpecies.PLANT.getMaxSpeciesOnSector();
     }
 

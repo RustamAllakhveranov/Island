@@ -1,16 +1,18 @@
 package com.javarush.projects.model.organisms;
 
 import com.javarush.projects.model.exceptions.ErasingException;
+import com.javarush.projects.model.island.Sector;
 
 public class Plant extends Organism {
-    public Plant(int positionX, int positionY) {
-        super(positionX, positionY);
+    public Plant(Sector startPosition) {
+        super(startPosition);
     }
 
     @Override
     protected void launchLifeCycle() {
 
     }
+
     @Override
     protected void eraseBody() {
         boolean removed = currentLocation.removePlant(this);

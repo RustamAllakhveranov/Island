@@ -1,8 +1,10 @@
 package com.javarush.projects.model.organisms;
 
+import com.javarush.projects.model.island.Sector;
+
 public abstract class Herbivore extends Animal implements CanEatPlant {
-    protected Herbivore(int positionX, int positionY) {
-        super(positionX, positionY);
+    protected Herbivore(Sector startPosition) {
+        super(startPosition);
     }
 
     @Override

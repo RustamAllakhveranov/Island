@@ -1,8 +1,11 @@
 package com.javarush.projects.model.utilities;
 
+import com.javarush.projects.model.exceptions.BiotaCreatingException;
 import com.javarush.projects.model.exceptions.InvalidPositionException;
 import com.javarush.projects.model.exceptions.InvalidWeightException;
 import com.javarush.projects.model.island.Island;
+import com.javarush.projects.model.island.Sector;
+import com.javarush.projects.model.metadata.OrganismSpecies;
 import com.javarush.projects.model.organisms.Organism;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +39,18 @@ public class Validator {
             String message = String.format("Weight cannot be negative: %d", weight);
             LOGGER.error(message);
             throw new InvalidWeightException(message);
+        }
+    }
+
+    public static void validatePosition(Sector sector) {
+        validatePosition(sector.getPositionX(), sector.getPositionY());
+    }
+
+    public static void validateCountOfSpecies(int count, OrganismSpecies species) {
+        int limit = species.getMaxSpeciesOnSector() * Island.HEIGHT * Island.WIDTH;
+        if (count > limit) {
+            String message = String.format("Attempt to create too many %s: %d. Limit: %d", species, count, limit);
+            throw new BiotaCreatingException(message);
         }
     }
 }

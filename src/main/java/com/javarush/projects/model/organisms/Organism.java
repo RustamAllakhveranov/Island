@@ -25,9 +25,9 @@ public abstract class Organism implements Runnable {
     //volatile не требуется
     protected Sector currentLocation;
 
-    protected Organism(int positionX, int positionY) {
-        Validator.validatePosition(positionX, positionY);
-        currentLocation = Island.getInstance().getSector(positionX, positionY);
+    protected Organism(Sector startPosition) {
+        Validator.validatePosition(startPosition);
+        currentLocation = startPosition;
         LOGGER.trace("{} инициализируется в позиции {}", this, currentLocation);
         organismSpecies = OrganismSpecies.valueOf(getClass().getSimpleName().toUpperCase());
         bodyWeight.add(organismSpecies.getWeight());

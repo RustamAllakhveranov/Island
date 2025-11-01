@@ -1,8 +1,10 @@
 package com.javarush.projects.model.organisms;
 
+import com.javarush.projects.model.island.Sector;
+
 public class Duck extends Predator implements CanEatPlant {
-    public Duck(int positionX, int positionY) {
-        super(positionX, positionY);
+    public Duck(Sector startPosition) {
+        super(startPosition);
     }
 
     @Override
@@ -15,5 +17,10 @@ public class Duck extends Predator implements CanEatPlant {
         } else {
             plant.decreaseBodyWeight(requiredFoodWeight - getCurrentSaturation());
         }
+    }
+
+    @Override
+    public void graze() {
+        throw new UnsupportedOperationException();
     }
 }

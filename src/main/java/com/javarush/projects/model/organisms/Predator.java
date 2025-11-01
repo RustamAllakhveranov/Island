@@ -1,13 +1,14 @@
 package com.javarush.projects.model.organisms;
 
+import com.javarush.projects.model.island.Sector;
 import com.javarush.projects.model.metadata.PredatorPreferences;
 
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Predator extends Animal {
-    protected Predator(int positionX, int positionY) {
-        super(positionX, positionY);
+    protected Predator(Sector startPosition) {
+        super(startPosition);
     }
 
     //
@@ -20,7 +21,7 @@ public abstract class Predator extends Animal {
             Class<? extends Animal> preyClass = getNextPreyClass();
             if (PredatorPreferences.isItInMenu(getClass(), preyClass)) {
                 Animal animal = findPrey(preyClass);
-                if(animal == null){
+                if (animal == null) {
                     throw new NullPointerException(String.format("Prey of %s is: %s", this, animal));
                 }
                 LOGGER.debug("{} нашел еду: {}", this, animal);

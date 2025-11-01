@@ -1,7 +1,9 @@
 package com.javarush.projects.model.organisms;
 
+import com.javarush.projects.model.island.Sector;
+
 public class Boa extends Predator {
-    public Boa(int positionX, int positionY) {
-        super(positionX, positionY);
+    public Boa(Sector startPosition) {
+        super(startPosition);
     }
 }

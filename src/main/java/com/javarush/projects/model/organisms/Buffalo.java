@@ -1,7 +1,9 @@
 package com.javarush.projects.model.organisms;
 
+import com.javarush.projects.model.island.Sector;
+
 public class Buffalo extends Herbivore {
-    protected Buffalo(int positionX, int positionY) {
-        super(positionX, positionY);
+    public Buffalo(Sector startPosition) {
+        super(startPosition);
     }
 }

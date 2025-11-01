@@ -1,8 +1,10 @@
 package com.javarush.projects.model.organisms;
 
+import com.javarush.projects.model.island.Sector;
+
 public class Mouse extends Predator implements CanEatPlant {
-    public Mouse(int positionX, int positionY) {
-        super(positionX, positionY);
+    public Mouse(Sector startPosition) {
+        super(startPosition);
     }
 
     @Override
