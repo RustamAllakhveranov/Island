@@ -8,6 +8,7 @@ import com.javarush.projects.model.island.Island;
 import com.javarush.projects.model.island.Sector;
 import com.javarush.projects.model.metadata.OrganismSpecies;
 import com.javarush.projects.model.organisms.Animal;
+import com.javarush.projects.model.organisms.Organism;
 import com.javarush.projects.model.organisms.Predator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +57,7 @@ public class Validator {
             throw new BiotaCreatingException(message);
         }
     }
-    public static void validateCannibalism(Class<? extends Predator> predatorClass, Class<? extends Animal> preyClass){
+    public static void validateCannibalism(Class<? extends Organism> predatorClass, Class<? extends Organism> preyClass){
         if (preyClass == predatorClass) {
             String message = String.format("Cannibalism detected: %s", predatorClass.getSimpleName());
             throw new CannibalismException(message);

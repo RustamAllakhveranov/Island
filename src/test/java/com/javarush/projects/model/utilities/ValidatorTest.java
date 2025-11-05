@@ -1,10 +1,14 @@
 package com.javarush.projects.model.utilities;
 
 import com.javarush.projects.model.exceptions.BiotaCreatingException;
+import com.javarush.projects.model.exceptions.CannibalismException;
 import com.javarush.projects.model.exceptions.InvalidPositionException;
 import com.javarush.projects.model.exceptions.InvalidWeightException;
 import com.javarush.projects.model.island.Island;
 import com.javarush.projects.model.metadata.OrganismSpecies;
+import com.javarush.projects.model.organisms.Animal;
+import com.javarush.projects.model.organisms.Organism;
+import com.javarush.projects.model.organisms.Predator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -85,5 +89,16 @@ class ValidatorTest {
     static Stream<Integer> getExtraPositiveCounts() {
         final Random random = new Random();
         return Stream.generate(() -> random.nextInt(1, Integer.MAX_VALUE)).limit(100);
+    }
+
+    @Test
+    void validateCannibalism() {
+        for (OrganismSpecies species : OrganismSpecies.values()) {
+            Class<? extends Organism> organismClass = species.getOrganismClass();
+            Assertions.assertThrows(
+                    CannibalismException.class,
+                    () -> Validator.validateCannibalism(organismClass, organismClass)
+            );
+        }
     }
 }
