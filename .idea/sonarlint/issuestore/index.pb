@@ -79,3 +79,5 @@ x
 Hsrc/main/java/com/javarush/projects/controller/StandardBiotaBuilder.java,f\a\fa61a07685f2276966b63fd120cfbb671101dfd0
 €
 Psrc/main/java/com/javarush/projects/model/exceptions/BiotaCreatingException.java,f\e\fe201bb3aea29dec72ed2ac74fd210855ec3ab3e
+~
+Nsrc/main/java/com/javarush/projects/model/exceptions/CannibalismException.java,4\f\4ffb05a7c1e5bae2ea1b0ad86bae99abdfae0949

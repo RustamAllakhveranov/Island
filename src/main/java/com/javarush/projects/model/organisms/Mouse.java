@@ -8,19 +8,36 @@ public class Mouse extends Predator implements CanEatPlant {
     }
 
     @Override
-    public void tryToEatPlant(Plant plant) {
-        double requiredFoodWeight = super.getRequiredFoodWeight();
-        double foodWeight = plant.getBodyWeight();
-        if (foodWeight <= requiredFoodWeight) {
-            increaseSaturation(foodWeight);
-            plant.decreaseBodyWeight(foodWeight);
-        } else {
-            plant.decreaseBodyWeight(requiredFoodWeight - getCurrentSaturation());
-        }
+    protected synchronized void tryToSatisfyHunger() {
+        super.tryToSatisfyHunger();
+        graze();
     }
 
     @Override
     public void graze() {
-        throw new UnsupportedOperationException();
+        Plant plant = currentLocation.getPlants().stream()
+                .findFirst()
+                .orElse(null);
+        if (plant != null) {
+            LOGGER.debug("{} нашел еду: {}", this, plant);
+            tryToEatPlant(plant);
+        }
+    }
+
+    @Override
+    public void tryToEatPlant(Plant plant) {
+        LOGGER.debug("{} пытается съесть {} в секторе {}", this, plant, currentLocation);
+        synchronized (this) {
+            double foodEaten = plant.decreaseBodyWeight(getRequiredFoodWeight());
+            if (foodEaten > 0) {
+                increaseSaturation(foodEaten);
+                LOGGER.debug(
+                        "{} съел {} кг {}. Насыщение: {}. Вес остатков растения: {}",
+                        this, foodEaten, plant, getCurrentSaturation(), plant.getBodyWeight()
+                );
+            } else {
+                LOGGER.debug("{} не успел съесть {}", this, plant);
+            }
+        }
     }
 }

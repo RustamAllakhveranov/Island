@@ -1,12 +1,14 @@
 package com.javarush.projects.model.utilities;
 
 import com.javarush.projects.model.exceptions.BiotaCreatingException;
+import com.javarush.projects.model.exceptions.CannibalismException;
 import com.javarush.projects.model.exceptions.InvalidPositionException;
 import com.javarush.projects.model.exceptions.InvalidWeightException;
 import com.javarush.projects.model.island.Island;
 import com.javarush.projects.model.island.Sector;
 import com.javarush.projects.model.metadata.OrganismSpecies;
-import com.javarush.projects.model.organisms.Organism;
+import com.javarush.projects.model.organisms.Animal;
+import com.javarush.projects.model.organisms.Predator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,9 +36,9 @@ public class Validator {
                 && positionY < Island.HEIGHT;
     }
 
-    public static void validateWeight(Double weight) {
+    public static void validateWeight(double weight) {
         if (weight < 0) {
-            String message = String.format("Weight cannot be negative: %d", weight);
+            String message = String.format("Weight cannot be negative: %f", weight);
             LOGGER.error(message);
             throw new InvalidWeightException(message);
         }
@@ -46,11 +48,18 @@ public class Validator {
         validatePosition(sector.getPositionX(), sector.getPositionY());
     }
 
-    public static void validateCountOfSpecies(int count, OrganismSpecies species) {
-        int limit = species.getMaxSpeciesOnSector() * Island.HEIGHT * Island.WIDTH;
+    public static void validateSpeciesCount(int count, OrganismSpecies species) {
+        int limit = species.getSectorSpeciesLimit() * Island.HEIGHT * Island.WIDTH;
         if (count > limit) {
             String message = String.format("Attempt to create too many %s: %d. Limit: %d", species, count, limit);
+            LOGGER.error(message);
             throw new BiotaCreatingException(message);
+        }
+    }
+    public static void validateCannibalism(Class<? extends Predator> predatorClass, Class<? extends Animal> preyClass){
+        if (preyClass == predatorClass) {
+            String message = String.format("Cannibalism detected: %s", predatorClass.getSimpleName());
+            throw new CannibalismException(message);
         }
     }
 }

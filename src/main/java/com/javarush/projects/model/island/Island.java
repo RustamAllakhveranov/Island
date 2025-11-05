@@ -3,7 +3,6 @@ package com.javarush.projects.model.island;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//Pattern: Class Holder Singleton
 public class Island {
     private static final Logger LOGGER = LoggerFactory.getLogger(Island.class.getName());
     public static final int WIDTH = 10;
@@ -27,8 +26,7 @@ public class Island {
         }
         LOGGER.trace("Все сектора инициализированы.");
     }
-    //синхронизация не требуется
-    //логирование не требуется
+
     public Sector getSector(int positionX, int positionY) {
         return islandSectors[positionX][positionY];
     }
@@ -36,8 +34,7 @@ public class Island {
     private static final class InstanceHolder {
         private static final Island INSTANCE = new Island();
     }
-    //синхронизация не требуется
-    //логирование не требуется
+
     public static Island getInstance() {
         return InstanceHolder.INSTANCE;
     }

@@ -1,0 +1,10 @@
+
+W	java:S125"<This block of commented-out lines of code should be removed.(±òW8®…ØØ¤3
+X	java:S1252"<This block of commented-out lines of code should be removed.(¼Óœó8ÿ‡×Ø¤3
+X	java:S125:"<This block of commented-out lines of code should be removed.(ñÀëè8ÂÎÙØ¤3
+u
+java:S1128"XRemove this unused import 'com.javarush.projects.model.exceptions.CannibalismException'.(„ÕæÚ8§œşü¤3
+L
+java:S1128"*Remove this unused import 'java.util.Set'.(ö²„¤şÿÿÿÿ8§œşü¤3
+`
+java:S1128	"CRemove this unused import 'java.util.concurrent.ThreadLocalRandom'.(¨ÏÙî8§œşü¤3

@@ -21,16 +21,22 @@ public enum OrganismSpecies {
     WOLF(Wolf.class, 50, 30, 3, 8);
     private final Class<? extends Organism> organismClass;
     private final double weight;
-    private final int maxSpeciesOnSector;
+    private final int sectorSpeciesLimit;
     private final int speed;
-    private final double maxSaturation;
+    private final double saturationLimit;
 
-    OrganismSpecies(Class<? extends Organism> organismClass, double weight, int maxSpeciesOnSector, int speed, double maxSaturation) {
+    OrganismSpecies(
+            Class<? extends Organism> organismClass,
+            double weight,
+            int sectorSpeciesLimit,
+            int speed,
+            double saturationLimit
+    ) {
         this.organismClass = organismClass;
         this.weight = weight;
-        this.maxSpeciesOnSector = maxSpeciesOnSector;
+        this.sectorSpeciesLimit = sectorSpeciesLimit;
         this.speed = speed;
-        this.maxSaturation = maxSaturation;
+        this.saturationLimit = saturationLimit;
     }
 
     public Class<? extends Organism> getOrganismClass() {
@@ -41,16 +47,16 @@ public enum OrganismSpecies {
         return weight;
     }
 
-    public int getMaxSpeciesOnSector() {
-        return maxSpeciesOnSector;
+    public int getSectorSpeciesLimit() {
+        return sectorSpeciesLimit;
     }
 
     public int getSpeed() {
         return speed;
     }
 
-    public double getMaxSaturation() {
-        return maxSaturation;
+    public double getSaturationLimit() {
+        return saturationLimit;
     }
 
     @Override
@@ -62,7 +68,7 @@ public enum OrganismSpecies {
         return toString().charAt(0) + toString().substring(1).toLowerCase();
     }
 
-    public static OrganismSpecies getSpeciesByClass(Class<? extends Organism> organismClass){
+    public static OrganismSpecies getSpeciesByClass(Class<? extends Organism> organismClass) {
         return OrganismSpecies.valueOf(organismClass.getSimpleName().toUpperCase());
     }
 }

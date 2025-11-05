@@ -10,17 +10,16 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.DoubleAdder;
 
 public abstract class Animal extends Organism {
-    private final double maxSaturation;
     private final int maxSpeed;
+    private final double saturationLimit;
     private final DoubleAdder currentSaturation;
 
     protected Animal(Sector startPosition) {
         super(startPosition);
-        maxSaturation = getOrganismSpecies().getMaxSaturation();
-        currentSaturation = new DoubleAdder();
-        currentSaturation.add(maxSaturation);
         this.maxSpeed = getOrganismSpecies().getSpeed();
-        enterSector(currentLocation);
+        saturationLimit = getOrganismSpecies().getSaturationLimit();
+        currentSaturation = new DoubleAdder();
+        currentSaturation.add(saturationLimit);
     }
 
     @Override
@@ -29,11 +28,14 @@ public abstract class Animal extends Organism {
         if (removed) {
             LOGGER.debug("{} erased from {}", this, currentLocation);
         } else {
-            throw new ErasingException(String.format("%s wasn't erased from %s", this, currentLocation));
+            String message = String.format("%s wasn't erased from %s", this, currentLocation);
+            LOGGER.error(message);
+            throw new ErasingException(message);
         }
     }
 
     protected synchronized void launchLifeCycle() {
+        enterSector(currentLocation);
         while (isAlive()) {
             if (isHungry()) {
                 tryToSatisfyHunger();
@@ -51,12 +53,12 @@ public abstract class Animal extends Organism {
     protected synchronized void increaseSaturation(double saturation) {
         Validator.validateWeight(saturation);
         currentSaturation.add(saturation);
-        if (getCurrentSaturation() == getOrganismSpecies().getMaxSaturation()) {
+        if (getCurrentSaturation() == getOrganismSpecies().getSaturationLimit()) {
             LOGGER.debug("{} наелся до отвала!", this);
         }
     }
 
-    protected synchronized void decreaseSaturation(double saturation) {
+    protected void decreaseSaturation(double saturation) {
         Validator.validateWeight(saturation);
         double decreasedValue = Math.min(saturation, getCurrentSaturation());
         currentSaturation.add(-decreasedValue);
@@ -67,14 +69,14 @@ public abstract class Animal extends Organism {
         }
     }
 
-    protected synchronized double getRequiredFoodWeight() {
-        double requiredFoodWeight = maxSaturation - getCurrentSaturation();
+    protected double getRequiredFoodWeight() {
+        double requiredFoodWeight = saturationLimit - getCurrentSaturation();
         Validator.validateWeight(requiredFoodWeight);
         return requiredFoodWeight;
     }
 
     protected boolean isHungry() {
-        return getCurrentSaturation() < getOrganismSpecies().getMaxSaturation() / 2;
+        return getCurrentSaturation() < getOrganismSpecies().getSaturationLimit() / 2;
     }
 
     protected abstract void tryToSatisfyHunger();
@@ -86,8 +88,10 @@ public abstract class Animal extends Organism {
 
     private void enterSector(Sector sector) {
         synchronized (this) {
+            LOGGER.debug("{} начинает перемещение в сектор {}", this, sector);
             sector.addAnimal(this);
             currentLocation = sector;
+            LOGGER.debug("{} переместился в сектор {}", this, currentLocation);
         }
     }
 
@@ -95,22 +99,28 @@ public abstract class Animal extends Organism {
         synchronized (this) {
             sector.removeAnimal(this);
             currentLocation = null;
+            LOGGER.debug("{} покинул сектор {}", this, sector);
         }
     }
 
     private void changePosition(Sector destination) {
         if (currentLocation == destination) {
-            throw new InvalidDestinationException(String.format("Current location: %s, destination: %s", currentLocation, destination));
+            String message = String.format("Current location: %s, destination: %s", currentLocation, destination);
+            LOGGER.error(message);
+            throw new InvalidDestinationException(message);
         }
-        LOGGER.info("{} перемещается из {} в {}", this, currentLocation, destination);
+
         synchronized (this) {
+            LOGGER.debug("{} собирается переместится из {} в {}", this, currentLocation, destination);
             leaveSector(currentLocation);
             enterSector(destination);
-            decreaseSaturation(maxSaturation / 5);
+            decreaseSaturation(saturationLimit / 5);
+            LOGGER.info("{} перемеСТИЛСЯ в {}", this, destination);
         }
+
     }
 
-    public void navigate() {
+    public synchronized void navigate() {
         int nextPosX = currentLocation.getPositionX() + getStepsCount();
         int nextPosY = currentLocation.getPositionY() + getStepsCount();
         if (Validator.isPositionValid(nextPosX, nextPosY)) {
@@ -119,7 +129,7 @@ public abstract class Animal extends Organism {
                 changePosition(destination);
             }
         } else {
-            LOGGER.info("{} не может определиться с направлением", this);
+            LOGGER.debug("{} не может определиться с направлением", this);
         }
     }
 }

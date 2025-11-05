@@ -12,7 +12,9 @@ public abstract class Herbivore extends Animal implements CanEatPlant {
         graze();
     }
 
-    public void graze() {
+    //вынести метод graze в сектор?
+    @Override
+    public synchronized void graze() {
         Plant plant = currentLocation.getPlants().stream()
                 .findFirst()
                 .orElse(null);
@@ -22,10 +24,9 @@ public abstract class Herbivore extends Animal implements CanEatPlant {
         }
     }
 
-
     @Override
     public void tryToEatPlant(Plant plant) {
-        LOGGER.debug("{} trying to eat {} in {}", this, plant, currentLocation);
+        LOGGER.debug("{} пытается съесть {} в секторе {}", this, plant, currentLocation);
         synchronized (this) {
             double foodEaten = plant.decreaseBodyWeight(getRequiredFoodWeight());
             if (foodEaten > 0) {
@@ -34,13 +35,9 @@ public abstract class Herbivore extends Animal implements CanEatPlant {
                         "{} съел {} кг {}. Насыщение: {}. Вес остатков растения: {}",
                         this, foodEaten, plant, getCurrentSaturation(), plant.getBodyWeight()
                 );
-                if (plant.getBodyWeight() == 0) {
-                    plant.die();
-                }
             } else {
                 LOGGER.debug("{} не успел съесть {}", this, plant);
             }
         }
     }
-
 }

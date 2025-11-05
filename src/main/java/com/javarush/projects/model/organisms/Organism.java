@@ -15,10 +15,7 @@ import java.util.concurrent.atomic.DoubleAdder;
 public abstract class Organism implements Runnable {
     protected static final Logger LOGGER = LoggerFactory.getLogger(Organism.class);
     private static final AtomicInteger ORGANISMS_COUNT = new AtomicInteger(0);
-    //volatile не требуется: нет сеттеров
-    //name перенести в Organism, присвоение оставить в наследниках
     private final String name = getClass().getSimpleName() + "#" + ORGANISMS_COUNT.incrementAndGet();
-    //volatile не требуется: класс DoubleAdder синхронизован
     protected DoubleAdder bodyWeight = new DoubleAdder();
     private final OrganismSpecies organismSpecies;
     protected volatile Thread individualThread;
@@ -28,9 +25,10 @@ public abstract class Organism implements Runnable {
     protected Organism(Sector startPosition) {
         Validator.validatePosition(startPosition);
         currentLocation = startPosition;
-        LOGGER.trace("{} инициализируется в позиции {}", this, currentLocation);
-        organismSpecies = OrganismSpecies.valueOf(getClass().getSimpleName().toUpperCase());
+        LOGGER.debug("{} инициализируется в позиции {}", this, currentLocation);
+        organismSpecies = OrganismSpecies.getSpeciesByClass(this.getClass());
         bodyWeight.add(organismSpecies.getWeight());
+        LOGGER.trace("Начальный вес {}: {}", this, getBodyWeight());
     }
 
     @Override
@@ -46,29 +44,32 @@ public abstract class Organism implements Runnable {
     }
 
     protected synchronized double decreaseBodyWeight(double weight) {
-        if (getBodyWeight() == 0){
+        if (getBodyWeight() == 0) {
             LOGGER.debug("{} уже съели!", this);
             return 0.0;
         }
         Validator.validateWeight(weight);
         double decreasedWeight = Math.min(weight, getBodyWeight());
+        LOGGER.debug("{} весом {} кг теряет {} кг массы", this, getBodyWeight(), decreasedWeight);
         bodyWeight.add(-decreasedWeight);
         if (getBodyWeight() == 0) eraseBody();
         return decreasedWeight;
     }
 
-    protected void die() {
-        LOGGER.info("{} умирает.", this);
+    public void die() {
+        LOGGER.info("{} умирает в секторе {}", this, currentLocation);
         synchronized (this) {
-            individualThread.interrupt();
+            if (individualThread != null && isAlive()) {
+                individualThread.interrupt();
+            }
         }
     }
 
-    protected boolean isAlive() {
+    public boolean isAlive() {
         return !individualThread.isInterrupted();
     }
 
-    protected boolean isLucky(int chancesOfLuck) {
+    public boolean isLucky(int chancesOfLuck) {
         return ThreadLocalRandom.current().nextInt(100) <= chancesOfLuck;
     }
 
@@ -83,7 +84,7 @@ public abstract class Organism implements Runnable {
         return name;
     }
 
-    protected boolean isDead() {
+    public boolean isDead() {
         return individualThread.isInterrupted();
     }
 

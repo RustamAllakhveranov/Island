@@ -1,3 +1,8 @@
 
-G
-java:S1068"*Remove this unused "LOGGER" private field.(Á°Ú©8îé§Õ£3
+]	java:S125*"<This block of commented-out lines of code should be removed.(ãªÞÿÿÿÿÿ8ßÉþý¤3
+w
+java:S1128"URemove this unused import 'com.javarush.projects.model.metadata.PredatorPreferences'.(õ ÷üÿÿÿÿ8äÉþý¤3
+h
+java:S1128"KRemove this unused import 'com.javarush.projects.model.organisms.Predator'.(Šë”ë8äÉþý¤3
+n
+java:S1128"LRemove this unused import 'com.javarush.projects.model.utilities.Validator'.(ì…ÆÄùÿÿÿÿ8äÉþý¤3

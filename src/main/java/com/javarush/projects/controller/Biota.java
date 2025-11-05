@@ -16,6 +16,7 @@ public class Biota {
     }
 
     public void launchBiota(long seconds) {
+        LOGGER.trace("Симуляция запущена на {} секунд.", seconds);
         for (Thread organismThread : organisms) {
             organismThread.start();
         }
@@ -24,9 +25,9 @@ public class Biota {
             for (Thread organismThread : organisms) {
                 organismThread.interrupt();
             }
-            LOGGER.info("Симуляция остановлена!");
+            LOGGER.trace("Симуляция остановлена!");
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 }

@@ -10,7 +10,7 @@ public class Plant extends Organism {
 
     @Override
     protected void launchLifeCycle() {
-
+        currentLocation.addPlant(this);
     }
 
     @Override
@@ -19,8 +19,11 @@ public class Plant extends Organism {
         if (removed) {
             LOGGER.debug("{} erased from {}", this, currentLocation);
         } else {
-            throw new ErasingException(String.format("%s wasn't erased from %s", this, currentLocation));
+            String message = String.format("%s wasn't erased from %s", this, currentLocation);
+            LOGGER.error(message);
+            throw new ErasingException(message);
         }
+        die();
     }
 
 //    public void grow() {

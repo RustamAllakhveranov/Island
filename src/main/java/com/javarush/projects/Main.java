@@ -8,7 +8,7 @@ public class Main {
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
-        LOGGER.debug("Main started!");
+        LOGGER.trace("Main started!");
         GameManager gameManager = new GameManager();
         gameManager.startSimulation(1);
     }

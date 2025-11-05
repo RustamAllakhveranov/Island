@@ -61,30 +61,15 @@ public class PredatorPreferences {
     private PredatorPreferences() {
     }
 
-//    public static PreyType[] getMenu(OrganismSpecies organismSpecies) {
-//        return switch (organismSpecies) {
-//            case BEAR -> BearMenu.values();
-//            case BOA -> BoaMenu.values();
-//            case BOAR -> BoarMenu.values();
-//            case DUCK -> DuckMenu.values();
-//            case EAGLE -> EagleMenu.values();
-//            case FOX -> FoxMenu.values();
-//            case MOUSE -> MouseMenu.values();
-//            case WOLF -> WolfMenu.values();
-//            default -> throw new IllegalStateException("Unexpected value: " + organismSpecies);
-//        };
-//    }
-public static Map<Class<? extends Animal>, Integer> getMenu(Class<? extends Predator> predatorClass) {
-    return huntChances.get(predatorClass);
-}
+    private static Map<Class<? extends Animal>, Integer> getMenu(Class<? extends Predator> predatorClass) {
+        return huntChances.get(predatorClass);
+    }
 
-//    public static boolean isItInMenu(OrganismSpecies hunterSpecies, OrganismSpecies preySpecies) {
-//        return Arrays.asList(getMenu(hunterSpecies)).contains(preySpecies.);
-//    }
     public static boolean isItInMenu(Class<? extends Predator> predatorClass, Class<? extends Animal> preyClass) {
         return getMenu(predatorClass).containsKey(preyClass);
     }
-    public static Integer getChancesToKill(Class<? extends Predator> predatorClass, Class<? extends Animal> preyClass){
+
+    public static Integer getChancesToKill(Class<? extends Predator> predatorClass, Class<? extends Animal> preyClass) {
         return getMenu(predatorClass).get(preyClass);
     }
 }
