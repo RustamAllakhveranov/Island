@@ -7,9 +7,7 @@ import com.javarush.projects.model.exceptions.InvalidWeightException;
 import com.javarush.projects.model.island.Island;
 import com.javarush.projects.model.island.Sector;
 import com.javarush.projects.model.metadata.OrganismSpecies;
-import com.javarush.projects.model.organisms.Animal;
 import com.javarush.projects.model.organisms.Organism;
-import com.javarush.projects.model.organisms.Predator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,13 +49,14 @@ public class Validator {
 
     public static void validateSpeciesCount(int count, OrganismSpecies species) {
         int limit = species.getSectorSpeciesLimit() * Island.HEIGHT * Island.WIDTH;
-        if (count > limit) {
+        if (count > limit || count < 0) {
             String message = String.format("Attempt to create too many %s: %d. Limit: %d", species, count, limit);
             LOGGER.error(message);
             throw new BiotaCreatingException(message);
         }
     }
-    public static void validateCannibalism(Class<? extends Organism> predatorClass, Class<? extends Organism> preyClass){
+
+    public static void validateCannibalism(Class<? extends Organism> predatorClass, Class<? extends Organism> preyClass) {
         if (preyClass == predatorClass) {
             String message = String.format("Cannibalism detected: %s", predatorClass.getSimpleName());
             throw new CannibalismException(message);

@@ -76,12 +76,23 @@ class ValidatorTest {
 
     @ParameterizedTest(name = "{displayName} Тест {index}: {arguments}")
     @MethodSource("getExtraPositiveCounts")
-    void validateSpeciesCount(int extraCount) {
+    void validateSpeciesCount_ThrowsBiotaCreatingException_WhenCountBiggerThanIslandLimit(int extraCount) {
         for (OrganismSpecies species : OrganismSpecies.values()) {
             int count = species.getSectorSpeciesLimit() * Island.HEIGHT * Island.WIDTH + extraCount;
             Assertions.assertThrows(
                     BiotaCreatingException.class,
                     () -> Validator.validateSpeciesCount(count, species)
+            );
+        }
+    }
+
+    @ParameterizedTest(name = "{displayName} Тест {index}: {arguments}")
+    @MethodSource("getExtraPositiveCounts")
+    void validateSpeciesCount_ThrowsBiotaCreatingException_WhenCountIsNegative(int count) {
+        for (OrganismSpecies species : OrganismSpecies.values()) {
+            Assertions.assertThrows(
+                    BiotaCreatingException.class,
+                    () -> Validator.validateSpeciesCount(-count, species)
             );
         }
     }
@@ -92,7 +103,7 @@ class ValidatorTest {
     }
 
     @Test
-    void validateCannibalism() {
+    void validateCannibalism_Throws_Exception() {
         for (OrganismSpecies species : OrganismSpecies.values()) {
             Class<? extends Organism> organismClass = species.getOrganismClass();
             Assertions.assertThrows(
