@@ -1,8 +1,10 @@
 package com.javarush.projects.model.utilities;
 
+import com.javarush.projects.model.exceptions.BiotaCreatingException;
 import com.javarush.projects.model.exceptions.InvalidPositionException;
 import com.javarush.projects.model.exceptions.InvalidWeightException;
 import com.javarush.projects.model.island.Island;
+import com.javarush.projects.model.metadata.OrganismSpecies;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -66,5 +68,22 @@ class ValidatorTest {
     static Stream<Double> getRandomNegativeDouble() {
         final Random random = new Random();
         return Stream.generate(() -> -Math.abs(random.nextDouble()) - Double.MIN_VALUE).limit(100);
+    }
+
+    @ParameterizedTest(name = "{displayName} Тест {index}: {arguments}")
+    @MethodSource("getExtraPositiveCounts")
+    void validateSpeciesCount(int extraCount) {
+        for (OrganismSpecies species : OrganismSpecies.values()) {
+            int count = species.getSectorSpeciesLimit() * Island.HEIGHT * Island.WIDTH + extraCount;
+            Assertions.assertThrows(
+                    BiotaCreatingException.class,
+                    () -> Validator.validateSpeciesCount(count, species)
+            );
+        }
+    }
+
+    static Stream<Integer> getExtraPositiveCounts() {
+        final Random random = new Random();
+        return Stream.generate(() -> random.nextInt(1, Integer.MAX_VALUE)).limit(100);
     }
 }
