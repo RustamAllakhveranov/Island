@@ -101,4 +101,11 @@ public class Sector {
         Collections.shuffle(preyClassList);
         return preyClassList.getFirst();
     }
+
+    public synchronized Plant findPlant() {
+        return getPlants()
+                .stream()
+                .findFirst()
+                .orElse(null);
+    }
 }
