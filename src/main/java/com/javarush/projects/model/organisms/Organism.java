@@ -1,7 +1,5 @@
 package com.javarush.projects.model.organisms;
 
-import com.javarush.projects.model.exceptions.ErasingException;
-import com.javarush.projects.model.island.Island;
 import com.javarush.projects.model.island.Sector;
 import com.javarush.projects.model.metadata.OrganismSpecies;
 import com.javarush.projects.model.utilities.Validator;
@@ -25,7 +23,7 @@ public abstract class Organism implements Runnable {
     protected Organism(Sector startPosition) {
         Validator.validatePosition(startPosition);
         currentLocation = startPosition;
-        LOGGER.debug("{} инициализируется в позиции {}", this, currentLocation);
+        LOGGER.info("{} инициализируется в позиции {}", this, currentLocation);
         organismSpecies = OrganismSpecies.getSpeciesByClass(this.getClass());
         bodyWeight.add(organismSpecies.getWeight());
         LOGGER.trace("Начальный вес {}: {}", this, getBodyWeight());
@@ -58,10 +56,8 @@ public abstract class Organism implements Runnable {
 
     public void die() {
         LOGGER.info("{} умирает в секторе {}", this, currentLocation);
-        synchronized (this) {
-            if (individualThread != null && isAlive()) {
-                individualThread.interrupt();
-            }
+        if (individualThread != null && isAlive()) {
+            individualThread.interrupt();
         }
     }
 

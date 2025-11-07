@@ -1,12 +1,10 @@
 package com.javarush.projects.model.organisms;
 
-import com.javarush.projects.model.exceptions.CannibalismException;
 import com.javarush.projects.model.island.Sector;
 import com.javarush.projects.model.metadata.PredatorPreferences;
 import com.javarush.projects.model.utilities.Validator;
 
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
+import static com.javarush.projects.Main.GLOBAL_ACTION_COUNTER;
 
 public abstract class Predator extends Animal {
     protected Predator(Sector startPosition) {
@@ -75,34 +73,46 @@ public abstract class Predator extends Animal {
     private void killAnimal(Animal animal) {
         animal.die();
     }
-    public synchronized void hunt() {
-        Class<? extends Animal> preyClass = currentLocation.getRandomResidentClass();
-        LOGGER.debug("{} почуял {} в секторе {}", this, preyClass.getSimpleName(), currentLocation);
-        if (PredatorPreferences.isItInMenu(getClass(), preyClass)) {
-            Validator.validateCannibalism(getClass(), preyClass);
-            LOGGER.debug("{} ищет {} в секторе{}", getClass().getSimpleName(), preyClass.getSimpleName(), currentLocation);
-            Animal prey = currentLocation.getRandomAnimalByClass(preyClass);
-            if (prey == null) {
-                String message = String.format(
-                        "Prey of %s is NULL in %s. Target class: %s", this, currentLocation, preyClass.getSimpleName()
-                );
-                LOGGER.error(message);
-                throw new NullPointerException(message);
+
+    public void hunt() {
+        synchronized (currentLocation) {
+            Class<? extends Animal> preyClass = currentLocation.getRandomResidentClass();
+            if(preyClass == null){
+                LOGGER.debug(
+                        "ACTION_ID:{} | {} не нашел ничего съедобного в секторе {}",
+                        GLOBAL_ACTION_COUNTER.incrementAndGet(),
+                        this,
+                        currentLocation);
+                return;
             }
-            LOGGER.debug("{} нашел еду в секторе {}: {}", this, currentLocation, prey);
-            if (prey.isAlive()) {
-                int chancesToKill = PredatorPreferences.getChancesToKill(getClass(), preyClass);
-                LOGGER.debug("{} пытается убить {} в секторе {}", this, prey, currentLocation);
-                tryToKill(chancesToKill, prey);
-            }
-            if (prey.isDead()) {
-                tryToEatAnimal(prey);
+            LOGGER.debug("ACTION_ID:{} | {} почуял {} в секторе {}", GLOBAL_ACTION_COUNTER.incrementAndGet(), this, preyClass.getSimpleName(), currentLocation);
+            if (PredatorPreferences.isItInMenu(getClass(), preyClass)) {
+                Validator.validateCannibalism(getClass(), preyClass);
+                LOGGER.info("ACTION_ID:{} | {} ищет {} в секторе{}", GLOBAL_ACTION_COUNTER.incrementAndGet(), getClass().getSimpleName(), preyClass.getSimpleName(), currentLocation);
+                Animal prey = currentLocation.getRandomAnimalByClass(preyClass);
+                if (prey == null) {
+                    String message = String.format(
+                            "ACTION_ID:%d | Prey of %s is NULL in %s. Target class: %s", GLOBAL_ACTION_COUNTER.incrementAndGet(), this, currentLocation, preyClass.getSimpleName()
+                    );
+                    LOGGER.error(message);
+                    throw new NullPointerException(message);
+                }
+                LOGGER.debug("{} нашел еду в секторе {}: {}", this, currentLocation, prey);
+                if (prey.isAlive()) {
+                    int chancesToKill = PredatorPreferences.getChancesToKill(getClass(), preyClass);
+                    LOGGER.info("{} пытается убить {} в секторе {}", this, prey, currentLocation);
+                    tryToKill(chancesToKill, prey);
+                }
+                if (prey.isDead()) {
+                    tryToEatAnimal(prey);
+                }
             }
         }
     }
+
     public void tryToEatAnimal(Animal animal) {
-        LOGGER.debug("{} пытается съесть {} в секторе {}", this, animal, currentLocation);
         synchronized (this) {
+            LOGGER.info("{} пытается съесть {} в секторе {}", this, animal, currentLocation);
             double foodEaten = animal.decreaseBodyWeight(getRequiredFoodWeight());
             if (foodEaten > 0) {
                 increaseSaturation(foodEaten);

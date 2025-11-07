@@ -28,7 +28,7 @@ public class StandardBiotaBuilder implements BiotaBuilder {
 
     @Override
     public StandardBiotaBuilder addAnimals(Class<? extends Animal> animalClass, int count) {
-        LOGGER.info("{} start count: {}", animalClass, count);
+        LOGGER.info("{} start count: {}", animalClass.getSimpleName(), count);
         OrganismSpecies species = OrganismSpecies.getSpeciesByClass(animalClass);
         Validator.validateSpeciesCount(count, species);
         for (int i = 0; i < count; i++) {

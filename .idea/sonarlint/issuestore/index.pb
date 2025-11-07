@@ -81,3 +81,9 @@ Hsrc/main/java/com/javarush/projects/controller/StandardBiotaBuilder.java,f\a\f
 Psrc/main/java/com/javarush/projects/model/exceptions/BiotaCreatingException.java,f\e\fe201bb3aea29dec72ed2ac74fd210855ec3ab3e
 ~
 Nsrc/main/java/com/javarush/projects/model/exceptions/CannibalismException.java,4\f\4ffb05a7c1e5bae2ea1b0ad86bae99abdfae0949
+?
+thread_dump.txt,c\7\c74300f051a5f05658c6ae48baace238691d3ad1
+A
+thread_dump_2.txt,8\3\8338170d7f2bc6ef1c0abda5033a1913ae38a387
+A
+thread_dump_3.txt,a\4\a481e97ec432da9a53b01905775558365522a374

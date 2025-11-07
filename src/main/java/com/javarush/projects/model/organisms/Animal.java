@@ -9,6 +9,8 @@ import com.javarush.projects.model.utilities.Validator;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.DoubleAdder;
 
+import static com.javarush.projects.Main.GLOBAL_ACTION_COUNTER;
+
 public abstract class Animal extends Organism {
     private final int maxSpeed;
     private final double saturationLimit;
@@ -23,10 +25,10 @@ public abstract class Animal extends Organism {
     }
 
     @Override
-    protected void eraseBody() {
+    protected synchronized void eraseBody() {
         boolean removed = currentLocation.removeAnimal(this);
         if (removed) {
-            LOGGER.debug("{} erased from {}", this, currentLocation);
+            LOGGER.info("{} erased from {}", this, currentLocation);
         } else {
             String message = String.format("%s wasn't erased from %s", this, currentLocation);
             LOGGER.error(message);
@@ -54,15 +56,15 @@ public abstract class Animal extends Organism {
         Validator.validateWeight(saturation);
         currentSaturation.add(saturation);
         if (getCurrentSaturation() == getOrganismSpecies().getSaturationLimit()) {
-            LOGGER.debug("{} наелся до отвала!", this);
+            LOGGER.info("{} наелся до отвала!", this);
         }
     }
 
-    protected void decreaseSaturation(double saturation) {
+    protected synchronized void decreaseSaturation(double saturation) {
         Validator.validateWeight(saturation);
         double decreasedValue = Math.min(saturation, getCurrentSaturation());
         currentSaturation.add(-decreasedValue);
-        LOGGER.debug("{} теряет насыщение: {}. Текущий уровень: {}", this, decreasedValue, getCurrentSaturation());
+        LOGGER.info("{} теряет насыщение: {}. Текущий уровень: {}", this, decreasedValue, getCurrentSaturation());
         Validator.validateWeight(getCurrentSaturation());
         if (getCurrentSaturation() == 0) {
             die();
@@ -87,20 +89,13 @@ public abstract class Animal extends Organism {
     }
 
     private void enterSector(Sector sector) {
-        synchronized (this) {
-            LOGGER.debug("{} начинает перемещение в сектор {}", this, sector);
-            sector.addAnimal(this);
-            currentLocation = sector;
-            LOGGER.debug("{} переместился в сектор {}", this, currentLocation);
-        }
+        sector.addAnimal(this);
+        currentLocation = sector;
     }
 
     private void leaveSector(Sector sector) {
-        synchronized (this) {
-            sector.removeAnimal(this);
-            currentLocation = null;
-            LOGGER.debug("{} покинул сектор {}", this, sector);
-        }
+        sector.removeAnimal(this);
+        currentLocation = null;
     }
 
     private void changePosition(Sector destination) {
@@ -109,15 +104,17 @@ public abstract class Animal extends Organism {
             LOGGER.error(message);
             throw new InvalidDestinationException(message);
         }
-
-        synchronized (this) {
-            LOGGER.debug("{} собирается переместится из {} в {}", this, currentLocation, destination);
-            leaveSector(currentLocation);
-            enterSector(destination);
-            decreaseSaturation(saturationLimit / 5);
-            LOGGER.info("{} перемеСТИЛСЯ в {}", this, destination);
+        Sector firstLock = currentLocation.hashCode() > destination.hashCode() ? currentLocation : destination;
+        Sector secondLock = firstLock == currentLocation ? destination : currentLocation;
+        synchronized (firstLock) {
+            synchronized (secondLock) {
+                LOGGER.debug("ACTION_ID:{} | {} собирается переместится из {} в {}", GLOBAL_ACTION_COUNTER.incrementAndGet(), this, currentLocation, destination);
+                leaveSector(currentLocation);
+                enterSector(destination);
+                decreaseSaturation(saturationLimit / 5);
+                LOGGER.info("ACTION_ID:{} | {} перемеСТИЛСЯ в {}", GLOBAL_ACTION_COUNTER.incrementAndGet(), this, destination);
+            }
         }
-
     }
 
     public synchronized void navigate() {

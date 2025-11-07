@@ -26,8 +26,8 @@ public abstract class Herbivore extends Animal implements CanEatPlant {
 
     @Override
     public void tryToEatPlant(Plant plant) {
-        LOGGER.debug("{} пытается съесть {} в секторе {}", this, plant, currentLocation);
         synchronized (this) {
+            LOGGER.debug("{} пытается съесть {} в секторе {}", this, plant, currentLocation);
             double foodEaten = plant.decreaseBodyWeight(getRequiredFoodWeight());
             if (foodEaten > 0) {
                 increaseSaturation(foodEaten);
