@@ -15,29 +15,23 @@ public class Mouse extends Predator implements CanEatPlant {
 
     @Override
     public void graze() {
-        Plant plant = currentLocation.getPlants().stream()
-                .findFirst()
-                .orElse(null);
-        if (plant != null) {
-            LOGGER.debug("{} нашел еду: {}", this, plant);
-            tryToEatPlant(plant);
+        Plant plant = currentLocation.findPlant();
+        if (plant == null || plant.isDead()) return;
+        LOGGER.debug("{} нашел еду: {}", this, plant);
+        double requiredFoodWeight = getRequiredFoodWeight();
+        double foodEaten;
+        synchronized (plant) {
+            LOGGER.debug("{} пытается съесть {} в секторе {}", this, plant, currentLocation);
+            foodEaten = plant.decreaseBodyWeight(requiredFoodWeight);
         }
-    }
-
-    @Override
-    public void tryToEatPlant(Plant plant) {
-        LOGGER.debug("{} пытается съесть {} в секторе {}", this, plant, currentLocation);
-        synchronized (this) {
-            double foodEaten = plant.decreaseBodyWeight(getRequiredFoodWeight());
-            if (foodEaten > 0) {
-                increaseSaturation(foodEaten);
-                LOGGER.debug(
-                        "{} съел {} кг {}. Насыщение: {}. Вес остатков растения: {}",
-                        this, foodEaten, plant, getCurrentSaturation(), plant.getBodyWeight()
-                );
-            } else {
-                LOGGER.debug("{} не успел съесть {}", this, plant);
-            }
+        if (foodEaten > 0) {
+            increaseSaturation(foodEaten);
+            LOGGER.debug(
+                    "{} съел {} кг {}. Насыщение: {}. Вес остатков растения: {}",
+                    this, foodEaten, plant, getCurrentSaturation(), plant.getBodyWeight()
+            );
+        } else {
+            LOGGER.debug("{} не успел съесть {}", this, plant);
         }
     }
 }

@@ -8,36 +8,30 @@ public abstract class Herbivore extends Animal implements CanEatPlant {
     }
 
     @Override
-    protected synchronized void tryToSatisfyHunger() {
+    protected void tryToSatisfyHunger() {
         graze();
     }
 
-    //вынести метод graze в сектор?
     @Override
-    public synchronized void graze() {
-        Plant plant = currentLocation.getPlants().stream()
-                .findFirst()
-                .orElse(null);
-        if (plant != null) {
-            LOGGER.debug("{} нашел еду: {}", this, plant);
-            tryToEatPlant(plant);
-        }
-    }
+    public void graze() {
 
-    @Override
-    public void tryToEatPlant(Plant plant) {
-        synchronized (this) {
+        Plant plant = currentLocation.findPlant();
+        if (plant == null || plant.isDead()) return;
+        LOGGER.debug("{} нашел еду: {}", this, plant);
+        double requiredFoodWeight = getRequiredFoodWeight();
+        double foodEaten;
+        synchronized (plant) {
             LOGGER.debug("{} пытается съесть {} в секторе {}", this, plant, currentLocation);
-            double foodEaten = plant.decreaseBodyWeight(getRequiredFoodWeight());
-            if (foodEaten > 0) {
-                increaseSaturation(foodEaten);
-                LOGGER.debug(
-                        "{} съел {} кг {}. Насыщение: {}. Вес остатков растения: {}",
-                        this, foodEaten, plant, getCurrentSaturation(), plant.getBodyWeight()
-                );
-            } else {
-                LOGGER.debug("{} не успел съесть {}", this, plant);
-            }
+            foodEaten = plant.decreaseBodyWeight(requiredFoodWeight);
+        }
+        if (foodEaten > 0) {
+            increaseSaturation(foodEaten);
+            LOGGER.debug(
+                    "{} съел {} кг {}. Насыщение: {}. Вес остатков растения: {}",
+                    this, foodEaten, plant, getCurrentSaturation(), plant.getBodyWeight()
+            );
+        } else {
+            LOGGER.debug("{} не успел съесть {}", this, plant);
         }
     }
 }
