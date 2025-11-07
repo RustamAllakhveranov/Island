@@ -109,7 +109,7 @@ public abstract class Predator extends Animal {
             }
         }
     }
-
+//tryToEatAnimal: убрать синхронизацию и сделать приватным
     public void tryToEatAnimal(Animal animal) {
         synchronized (this) {
             LOGGER.info("{} пытается съесть {} в секторе {}", this, animal, currentLocation);

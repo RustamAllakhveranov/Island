@@ -14,14 +14,17 @@ public class Plant extends Organism {
     }
 
     @Override
-    protected void eraseBody() {
+    protected  void eraseBody() {
         boolean removed = currentLocation.removePlant(this);
-        if (removed) {
-            LOGGER.debug("{} erased from {}", this, currentLocation);
-        } else {
-            String message = String.format("%s wasn't erased from %s", this, currentLocation);
-            LOGGER.error(message);
-            throw new ErasingException(message);
+        synchronized (this) {
+            if (removed) {
+                LOGGER.debug("{} erased from {}", this, currentLocation);
+                currentLocation = null;
+            } else {
+                String message = String.format("%s wasn't erased from %s", this, currentLocation);
+                LOGGER.error(message);
+                throw new ErasingException(message);
+            }
         }
         die();
     }

@@ -25,15 +25,17 @@ public abstract class Animal extends Organism {
     }
 
     @Override
-    protected synchronized void eraseBody() {
+    protected void eraseBody() {
         boolean removed = currentLocation.removeAnimal(this);
-        if (removed) {
-            LOGGER.info("{} erased from {}", this, currentLocation);
-            currentLocation = null;
-        } else {
-            String message = String.format("%s wasn't erased from %s", this, currentLocation);
-            LOGGER.error(message);
-            throw new ErasingException(message);
+        synchronized (this) {
+            if (removed) {
+                LOGGER.info("{} erased from {}", this, currentLocation);
+                currentLocation = null;
+            } else {
+                String message = String.format("%s wasn't erased from %s", this, currentLocation);
+                LOGGER.error(message);
+                throw new ErasingException(message);
+            }
         }
     }
 
