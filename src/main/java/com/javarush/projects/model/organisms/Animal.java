@@ -29,6 +29,7 @@ public abstract class Animal extends Organism {
         boolean removed = currentLocation.removeAnimal(this);
         if (removed) {
             LOGGER.info("{} erased from {}", this, currentLocation);
+            currentLocation = null;
         } else {
             String message = String.format("%s wasn't erased from %s", this, currentLocation);
             LOGGER.error(message);
@@ -36,7 +37,7 @@ public abstract class Animal extends Organism {
         }
     }
 
-    protected synchronized void launchLifeCycle() {
+    protected void launchLifeCycle() {
         enterSector(currentLocation);
         while (isAlive()) {
             if (isHungry()) {
@@ -48,19 +49,20 @@ public abstract class Animal extends Organism {
         }
     }
 
-    protected double getCurrentSaturation() {
+    protected synchronized double getCurrentSaturation() {
         return currentSaturation.doubleValue();
     }
 
     protected synchronized void increaseSaturation(double saturation) {
         Validator.validateWeight(saturation);
         currentSaturation.add(saturation);
-        if (getCurrentSaturation() == getOrganismSpecies().getSaturationLimit()) {
+        if (getCurrentSaturation() == saturationLimit) {
             LOGGER.info("{} наелся до отвала!", this);
         }
     }
 
     protected synchronized void decreaseSaturation(double saturation) {
+        if (isDead()) return;
         Validator.validateWeight(saturation);
         double decreasedValue = Math.min(saturation, getCurrentSaturation());
         currentSaturation.add(-decreasedValue);
@@ -78,7 +80,7 @@ public abstract class Animal extends Organism {
     }
 
     protected boolean isHungry() {
-        return getCurrentSaturation() < getOrganismSpecies().getSaturationLimit() / 2;
+        return getCurrentSaturation() < saturationLimit / 2;
     }
 
     protected abstract void tryToSatisfyHunger();
@@ -108,25 +110,33 @@ public abstract class Animal extends Organism {
         Sector secondLock = firstLock == currentLocation ? destination : currentLocation;
         synchronized (firstLock) {
             synchronized (secondLock) {
+                if (destination.hasSpaceForAnimal(this.getClass())) return;
                 LOGGER.debug("ACTION_ID:{} | {} собирается переместится из {} в {}", GLOBAL_ACTION_COUNTER.incrementAndGet(), this, currentLocation, destination);
                 leaveSector(currentLocation);
                 enterSector(destination);
-                decreaseSaturation(saturationLimit / 5);
                 LOGGER.info("ACTION_ID:{} | {} перемеСТИЛСЯ в {}", GLOBAL_ACTION_COUNTER.incrementAndGet(), this, destination);
             }
         }
+        decreaseSaturation(saturationLimit / 5);
     }
 
-    public synchronized void navigate() {
-        int nextPosX = currentLocation.getPositionX() + getStepsCount();
-        int nextPosY = currentLocation.getPositionY() + getStepsCount();
-        if (Validator.isPositionValid(nextPosX, nextPosY)) {
-            Sector destination = Island.getInstance().getSector(nextPosX, nextPosY);
-            if (currentLocation != destination && destination.hasSpaceForAnimal(this.getClass())) {
+    public void navigate() {
+        Sector destination = getRandomSector();
+        if (destination != null) {
+            if (currentLocation != destination) {
                 changePosition(destination);
             }
         } else {
             LOGGER.debug("{} не может определиться с направлением", this);
         }
+    }
+
+    private Sector getRandomSector() {
+        int nextPosX = currentLocation.getPositionX() + getStepsCount();
+        int nextPosY = currentLocation.getPositionY() + getStepsCount();
+        if (Validator.isPositionValid(nextPosX, nextPosY)) {
+            return Island.getInstance().getSector(nextPosX, nextPosY);
+        }
+        return null;
     }
 }

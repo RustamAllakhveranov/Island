@@ -18,7 +18,7 @@ public abstract class Organism implements Runnable {
     private final OrganismSpecies organismSpecies;
     protected volatile Thread individualThread;
     //volatile не требуется
-    protected Sector currentLocation;
+    protected volatile Sector currentLocation;
 
     protected Organism(Sector startPosition) {
         Validator.validatePosition(startPosition);
@@ -41,27 +41,29 @@ public abstract class Organism implements Runnable {
         return weight;
     }
 
-    protected synchronized double decreaseBodyWeight(double weight) {
+    protected double decreaseBodyWeight(double weight) {
         if (getBodyWeight() == 0) {
             LOGGER.debug("{} уже съели!", this);
             return 0.0;
         }
         Validator.validateWeight(weight);
-        double decreasedWeight = Math.min(weight, getBodyWeight());
-        LOGGER.debug("{} весом {} кг теряет {} кг массы", this, getBodyWeight(), decreasedWeight);
-        bodyWeight.add(-decreasedWeight);
-        if (getBodyWeight() == 0) eraseBody();
-        return decreasedWeight;
+        synchronized (this) {
+            double decreasedWeight = Math.min(weight, getBodyWeight());
+            LOGGER.debug("{} весом {} кг теряет {} кг массы", this, getBodyWeight(), decreasedWeight);
+            bodyWeight.add(-decreasedWeight);
+            if (getBodyWeight() == 0) eraseBody();
+            return decreasedWeight;
+        }
     }
 
-    public void die() {
+    public synchronized void die() {
         LOGGER.info("{} умирает в секторе {}", this, currentLocation);
         if (individualThread != null && isAlive()) {
             individualThread.interrupt();
         }
     }
 
-    public boolean isAlive() {
+    public synchronized boolean isAlive() {
         return !individualThread.isInterrupted();
     }
 
@@ -80,7 +82,7 @@ public abstract class Organism implements Runnable {
         return name;
     }
 
-    public boolean isDead() {
+    public synchronized boolean isDead() {
         return individualThread.isInterrupted();
     }
 
